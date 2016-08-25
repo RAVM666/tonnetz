@@ -33,12 +33,6 @@
         <div class="collapse navbar-collapse" id="navbar-collapse">
           <ul class="nav navbar-nav" role="tablist">
             <li>
-              <a href="#controls" data-toggle="tab" role="tab" aria-controls="controls">
-                <i class="fa fa-fw fa-gamepad" aria-hidden="true"></i>
-                Controls<span class="caret"></span>
-              </a>
-            </li>
-            <li>
               <a href="#appearance" data-toggle="tab" role="tab" aria-controls="appearance">
                 <i class="fa fa-fw fa-eye" aria-hidden="true"></i>
                 Appearance<span class="caret"></span>
@@ -64,15 +58,6 @@
       </nav>
 
       <div class="tab-content collapse col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2" id="tabs">
-        <div role="tabpanel" class="tab-pane" id="controls">
-          <div class="row">
-            <div class="col-xs-12 col-sm-6 col-md-4 col-sm-offset-3 col-md-offset-4">
-              <button type="button" id="panic" class="btn btn-danger btn-block" data-toggle="tooltip" title="All notes off">
-              <i class="fa fa-fw fa-lg fa-exclamation-circle" aria-hidden="true"></i>
-              Panic</button>
-            </div>
-          </div>
-        </div>
         <div role="tabpanel" class="tab-pane" id="appearance">
           <div class="panel panel-default">
             <div class="panel-heading">Appearance</div>
@@ -184,13 +169,10 @@
             <div class="panel-heading">How to use</div>
             <div class="panel-body">
               <p>If your browser supports the Web MIDI API, you can use TonnetzViz with any MIDI-enabled instrument.
-              Just connect it to your computer, go to <a href="#controls" class="tab-link">Controls</a>, select
-              the appropriate MIDI port and play. You can also connect TonnetzViz to a software sequencer using a
-              virtual loopback MIDI port.</p>
+              Just connect it to your computer and play.</p>
 
               <p>No MIDI support in your browser? Don't have a MIDI keyboard handy?
-              You can use your computer's keyboard to control the app
-              (see <a href="#controls" class="tab-link">Controls</a>). You can also turn on
+              You can use your computer's keyboard to control the app. You can also turn on
               <a href="#sound" class="tab-link">sound</a> to hear what you are playing.</p>
             </div>
           </div>
