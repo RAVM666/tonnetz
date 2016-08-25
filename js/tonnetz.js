@@ -59,8 +59,6 @@ var tonnetz = (function() {
 
 
   module.noteOn = function(c, pitch) {
-    audio.noteOn(c, pitch);
-
     if (!(pitch in channels[c].pitches)) {
       var i = pitch%12;
       tones[i].state = STATE_ON;
@@ -80,8 +78,6 @@ var tonnetz = (function() {
   };
 
   module.noteOff = function(c, pitch) {
-    audio.noteOff(c, pitch);
-
     if (pitch in channels[c].pitches) {
       var i = pitch%12;
       delete channels[c].pitches[pitch];

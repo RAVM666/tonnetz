@@ -37,7 +37,6 @@ var audio = (function() {
   var module = {};
 
   var audioCtx, notes, gain;
-  var enabled = false;
   var synthType;
 
   var CHANNELS = 17;
@@ -57,12 +56,6 @@ var audio = (function() {
 
     notes = $.map(Array(CHANNELS), function() { return {}; });
 
-    $('#sound-on').click(function() {
-      enabled = !enabled;
-      $(this).next('i').add('nav a[href="#sound"] i.fa')
-        .toggleClass('fa-volume-off fa-volume-up');
-    });
-
     $('#synth-type').change(function() {
       synthType = $(this).val();
     }).change();
@@ -73,7 +66,7 @@ var audio = (function() {
   };
 
   module.noteOn = function(channel, pitch) {
-    if (!audioCtx || !enabled) return;
+    if (!audioCtx) return;
 
     if (!(pitch in notes[channel])) {
       notes[channel][pitch] =
