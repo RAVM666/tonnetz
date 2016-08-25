@@ -79,6 +79,8 @@ var audio = (function() {
   module.noteOff = function(channel, pitch) {
     if (!audioCtx) return;
 
+    if (tonnetz.channels[channel].sustain) return;
+
     if (pitch in notes[channel]) {
       notes[channel][pitch].stop();
       delete notes[channel][pitch];

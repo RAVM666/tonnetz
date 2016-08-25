@@ -43,7 +43,7 @@ var keyboard = (function() {
 
     var key = event.key;
     if (" " == key)
-      tonnetz.panic();
+      tonnetz.sustainOn(16);
     else if ("ArrowDown" == key)
       base += 4;
     else if ("ArrowUp" == key)
@@ -63,6 +63,10 @@ var keyboard = (function() {
 
   var onKeyUp = function(event) {
     if (somethingHasFocus()) return;
+
+    var key = event.key;
+    if (" " == key)
+      tonnetz.panic();
 
     var note = getPitchFromKeyboardEvent(event);
     if (note != null) {

@@ -52,6 +52,7 @@ var tonnetz = (function() {
         'sustain': false
       };
     });
+    module.channels = channels;
 
     this.rebuild();
     window.onresize = function() { module.rebuild(); };
