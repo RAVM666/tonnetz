@@ -9,8 +9,6 @@ var tonnetz = (function() {
       STATE_SUST = 2,
       STATE_ON = 3;
   var STATE_NAMES = ['OFF', 'GHOST', 'SUSTAIN', 'ON'];
-  var LAYOUT_RIEMANN = 'riemann',
-      LAYOUT_SONOME = 'sonome';
 
   var W,  // width
       H,  // height
@@ -18,7 +16,6 @@ var tonnetz = (function() {
 
   module.density = 22;
   module.ghostDuration = 500;
-  module.layout = LAYOUT_RIEMANN;
 
   var toneGrid = [];
   var tones;
@@ -176,11 +173,6 @@ var tonnetz = (function() {
     }
 
     return false;
-  };
-
-  module.setLayout = function(layout) {
-    this.layout = layout;
-    this.rebuild();
   };
 
 
@@ -395,10 +387,7 @@ var tonnetz = (function() {
       case 8: result = {x: -0.5*SQRT_3*u, y: 0.5*u}; break;
     }
 
-    if (module.layout == LAYOUT_RIEMANN) {
-      result = {x: -result.y, y: result.x};
-    }
-
+    result = {x: -result.y, y: result.x};
     return result;
   };
 
@@ -425,15 +414,9 @@ var tonnetz = (function() {
     noteLabels.appendChild(node.label);
 
     // Create labels for the two triads above this node.
-    if (module.layout == LAYOUT_RIEMANN) {
-      var yUnit = u * SQRT_3;
-      node.majorTriadLabel = createLabel(name.toUpperCase(), x + u/2, y + yUnit/6);
-      node.minorTriadLabel = createLabel(name.toLowerCase(), x + u/2, y - yUnit/6);
-    } else if (module.layout == LAYOUT_SONOME) {
-      var xUnit = u * SQRT_3;
-      node.majorTriadLabel = createLabel(name.toUpperCase(), x + xUnit/6, y - u/2);
-      node.minorTriadLabel = createLabel(name.toLowerCase(), x - xUnit/6, y - u/2);
-    }
+    var yUnit = u * SQRT_3;
+    node.majorTriadLabel = createLabel(name.toUpperCase(), x + u/2, y + yUnit/6);
+    node.minorTriadLabel = createLabel(name.toLowerCase(), x + u/2, y - yUnit/6);
     node.majorTriadLabel.className = 'major';
     node.minorTriadLabel.className = 'minor';
     triadLabels.appendChild(node.majorTriadLabel);
@@ -458,36 +441,18 @@ var tonnetz = (function() {
     $(noteLabels).css('font-size', u * 0.17 + 'px');
     $(triadLabels).css('font-size', u * 0.17 + 'px');
 
-    if (this.layout == LAYOUT_RIEMANN) {
-      var yUnit = u * SQRT_3;
-      var uW = Math.ceil(W/u);
-      var uH = Math.ceil(H/yUnit);
-      for(var j=-Math.floor(uW/2+1); j<=Math.floor(uW/2+1); j++){
-        for(var i=-Math.floor(uH/2+1); i<=Math.floor(uH/2+1); i++){
-          addNode(((i-7*j)%12 + 12)%12,
-                  W/2 - j*u,
-                  H/2 + i*yUnit);
+    var yUnit = u * SQRT_3;
+    var uW = Math.ceil(W/u);
+    var uH = Math.ceil(H/yUnit);
+    for(var j=-Math.floor(uW/2+1); j<=Math.floor(uW/2+1); j++){
+      for(var i=-Math.floor(uH/2+1); i<=Math.floor(uH/2+1); i++){
+        addNode(((i-7*j)%12 + 12)%12,
+                W/2 - j*u,
+                H/2 + i*yUnit);
 
-          addNode(((i-7*j)%12 + 12 + 4)%12,
-                  W/2 - (j - 0.5)*u,
-                  H/2 + (i + 0.5)*yUnit);
-        }
-      }
-    } else if (this.layout == LAYOUT_SONOME) {
-      var xUnit = u * SQRT_3;
-      var uW = Math.ceil(W/xUnit);
-      var uH = Math.ceil(H/u);
-
-      for (var j=-Math.floor(uH/2+1); j<=Math.floor(uH/2+1); j++) {
-        for (var i=-Math.floor(uW/2+1); i<=Math.floor(uW/2+1); i++) {
-          addNode(((i-7*j)%12 + 12)%12,
-                  W/2 + i*xUnit,
-                  H/2 + j*u);
-
-          addNode(((i-7*j)%12 + 12 + 4)%12,
-                  W/2 + (i + 0.5)*xUnit,
-                  H/2 + (j - 0.5)*u);
-        }
+        addNode(((i-7*j)%12 + 12 + 4)%12,
+                W/2 - (j - 0.5)*u,
+                H/2 + (i + 0.5)*yUnit);
       }
     }
 

@@ -49,9 +49,6 @@ $(function(){
       $(this).closest('.form-group').removeClass('has-error');
     }
   });
-  $('input[type=radio][name=layout]').change(function() {
-    tonnetz.setLayout($(this).val());
-  });
 
   $('[data-toggle="tooltip"]').tooltip();
 
