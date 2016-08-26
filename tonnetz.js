@@ -440,32 +440,36 @@ var tonnetz = (function() {
   };
 
   module.rebuild = function() {
-    W = canvas.width  = window.innerWidth;
-    H = canvas.height = window.innerHeight;
-    u = (W+H)/this.density;
+    W = window.innerWidth;
+    H = window.innerHeight;
+    canvas.width = W;
+    canvas.height = H;
+    u = (W + H) / this.density;
 
-    for (var i=0; i<12; i++) {
+    const d3 = getNeighborXYDiff(0, 3);
+    const d4 = getNeighborXYDiff(0, 4);
+    const r3 = Math.sqrt(d3.x * d3.x + d3.y * d3.y);
+    const r4 = Math.sqrt(d4.x * d4.x + d4.y * d4.y);
+    const r = Math.sqrt(W * W / 4 + H * H / 4);
+    const n3 = Math.ceil(r / r3) + 1;
+    const n4 = Math.ceil(r / r4) + 1;
+
+    for (let i = 0; i < 12; i++)
       toneGrid[i] = [];
-    }
 
     $(noteLabels).empty();
     $(triadLabels).empty();
 
-    $(noteLabels).css('font-size', u * 0.17 + 'px');
-    $(triadLabels).css('font-size', u * 0.17 + 'px');
+    $(noteLabels).css("font-size", u * 0.17 + "px");
+    $(triadLabels).css("font-size", u * 0.17 + "px");
 
-    var yUnit = u * SQRT_3;
-    var uW = Math.ceil(W/u);
-    var uH = Math.ceil(H/yUnit);
-    for(var j=-Math.floor(uW/2+1); j<=Math.floor(uW/2+1); j++) {
-      for(var i=-Math.floor(uH/2+1); i<=Math.floor(uH/2+1); i++) {
-        addNode(((i-7*j)%12 + 12)%12,
-                W/2 - j*u,
-                H/2 + i*yUnit);
+    for (let i3 = -n3; i3 <= n3; i3++) {
+      for (let i4 = -n4; i4 <= n4; i4++) {
+        let t = ((3 * i3 + 4 * i4) % 12 + 12) % 12;
+        let x = W / 2 + i3 * d3.x + i4 * d4.x;
+        let y = H / 2 + i3 * d3.y + i4 * d4.y;
 
-        addNode(((i-7*j)%12 + 12 + 4)%12,
-                W/2 - (j - 0.5)*u,
-                H/2 + (i + 0.5)*yUnit);
+        addNode(t, x, y);
       }
     }
 
