@@ -56,13 +56,9 @@ var audio = (function() {
 
     notes = $.map(Array(CHANNELS), function() { return {}; });
 
-    $('#synth-type').change(function() {
-      synthType = $(this).val();
-    }).change();
+    synthType = "sine";
 
-    $('#gain').on('input change propertychange paste', function() {
-      gain.gain.value = Math.min(1, Math.max(Number($(this).val()), 0));
-    }).change();
+    gain.gain.value = 0.3;
   };
 
   module.noteOn = function(channel, pitch) {
