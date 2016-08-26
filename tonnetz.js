@@ -370,33 +370,33 @@ var tonnetz = (function() {
   };
 
   var getNeighborXYDiff = function(t1, t2) {
-    const sqrt3 = Math.sqrt(3);
     const diff = (t2 - t1 + 12) % 12;
+    const h = 2 * Math.sqrt(3);
     var x, y;
 
     if (3 == diff) {
-      x = 0.5;
-      y = -0.5 * sqrt3;
+      x = 3;
+      y = -h;
     } else if (7 == diff) {
-      x = 1;
+      x = 7;
       y = 0;
     } else if (4 == diff) {
-      x = 0.5;
-      y = 0.5 * sqrt3;
+      x = 4;
+      y = h;
     } else if (9 == diff) {
-      x = -0.5;
-      y = 0.5 * sqrt3;
+      x = -3;
+      y = h;
     } else if (5 == diff) {
-      x = -1;
+      x = -7;
       y = 0;
     } else if (8 == diff) {
-      x = -0.5;
-      y = -0.5 * sqrt3;
+      x = -4;
+      y = -h;
     }
 
     return {
-      x: u * x,
-      y: u * y
+      x: u * x / 5,
+      y: u * y / 5
     };
   };
 
