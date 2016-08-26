@@ -13,21 +13,6 @@ $(function(){
   midi.init();
   keyboard.init();
 
-  $('#tonnetz').mousewheel(function(event) {
-    tonnetz.setDensity(tonnetz.density - event.deltaY);
-    return false;
-  });
-  $(window).keypress(function(event) {
-    if (somethingHasFocus()) return;
-
-    var c = String.fromCharCode(event.which);
-    if (c == '+') {
-      tonnetz.setDensity(tonnetz.density - 2);
-    } else if (c == '-') {
-      tonnetz.setDensity(tonnetz.density + 2);
-    }
-  });
-
   $('#navbar a[data-toggle="tab"]').on('shown.bs.tab', function() {
     if ($(this).attr('href') != "#")
       $('#tabs').collapse('show');
