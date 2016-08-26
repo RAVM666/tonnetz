@@ -24,7 +24,6 @@ var tonnetz = (function() {
   var sustainEnabled = true,
       sustain = false;
 
-  var SQRT_3 = Math.sqrt(3);
   var CHANNELS = 17;  // the 17th channel is for the computer keyboard
 
 
@@ -245,10 +244,6 @@ var tonnetz = (function() {
 
     colorscheme.update();
 
-    var xUnit = u*Math.sqrt(3)/2;
-    var uW = Math.ceil(Math.ceil(W/xUnit*2)/2);
-    var uH = Math.ceil(H/u);
-
     var now = new Date();
 
     ctx.clearRect(0, 0, W, H);
@@ -375,27 +370,28 @@ var tonnetz = (function() {
   };
 
   var getNeighborXYDiff = function(t1, t2) {
-    var diff = (t2 - t1 + 12) % 12;
+    const sqrt3 = Math.sqrt(3);
+    const diff = (t2 - t1 + 12) % 12;
     var x, y;
 
     if (3 == diff) {
       x = 0.5;
-      y = -0.5 * SQRT_3;
+      y = -0.5 * sqrt3;
     } else if (7 == diff) {
       x = 1;
       y = 0;
     } else if (4 == diff) {
       x = 0.5;
-      y = 0.5 * SQRT_3;
+      y = 0.5 * sqrt3;
     } else if (9 == diff) {
       x = -0.5;
-      y = 0.5 * SQRT_3;
+      y = 0.5 * sqrt3;
     } else if (5 == diff) {
       x = -1;
       y = 0;
     } else if (8 == diff) {
       x = -0.5;
-      y = -0.5 * SQRT_3;
+      y = -0.5 * sqrt3;
     }
 
     return {
@@ -415,27 +411,38 @@ var tonnetz = (function() {
   };
 
   var addNode = function(tone, x, y) {
-    if (x < -u || y < -u || x > W+u || y > H+u) {
+    if (x < -u || y < -u || x > W + u || y > H + u)
       return;
-    }
 
-    var name = tones[tone].name;
-    var node = {'x': x, 'y': y};
+    const d3 = getNeighborXYDiff(0, 3);
+    const d4 = getNeighborXYDiff(0, 4);
+    const d7 = getNeighborXYDiff(0, 7);
+    const minor = {
+      x: x + (d3.x + d7.x) / 3,
+      y: y + (d3.y + d7.y) / 3
+    };
+    const major = {
+      x: x + (d4.x + d7.x) / 3,
+      y: y + (d4.y + d7.y) / 3
+    };
+    const name = tones[tone].name;
+    const nameUp = name.toUpperCase();
+    const nameLow = name.toLowerCase();
+    const node = {
+      x: x,
+      y: y
+    };
 
-    // Create the note label.
     node.label = createLabel(name, x, y);
     noteLabels.appendChild(node.label);
 
-    // Create labels for the two triads above this node.
-    var yUnit = u * SQRT_3;
-    node.majorTriadLabel = createLabel(name.toUpperCase(), x + u/2, y + yUnit/6);
-    node.minorTriadLabel = createLabel(name.toLowerCase(), x + u/2, y - yUnit/6);
+    node.majorTriadLabel = createLabel(nameUp, major.x, major.y);
+    node.minorTriadLabel = createLabel(nameLow, minor.x, minor.y);
     node.majorTriadLabel.className = 'major';
     node.minorTriadLabel.className = 'minor';
     triadLabels.appendChild(node.majorTriadLabel);
     triadLabels.appendChild(node.minorTriadLabel);
 
-    // Add the node to the grid.
     toneGrid[tone].push(node);
   };
 
