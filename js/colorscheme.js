@@ -10,58 +10,11 @@ var colorscheme = (function() {
   var schemes = {};
   var customSchemes = {};
   var customCounter;
-  var editor = null;
 
   module.init = function(schemeName) {
     loadCustomSchemes();
 
     this.setScheme(schemeName);
-
-    $('#color-scheme').change(function() {
-      module.setScheme($('#color-scheme').val());
-      tonnetz.draw(true);
-    });
-
-    editor = new JSONEditor(document.getElementById('scheme-editor-holder'), {
-      schema: jsonSchema,
-      theme: 'bootstrap3',
-      iconlib: 'fontawesome4',
-      object_layout: 'grid',
-      disable_edit_json: true,
-      disable_properties: true
-    });
-
-    $('#clone-scheme').click(function(event) {
-      event.preventDefault();
-
-      customCounter++;
-
-      // clone the current scheme and add it with a new name
-      var name = 'custom' + customCounter;
-      var data = $.extend(true, {}, module.scheme.data,
-        {'name': 'Custom'});
-      module.addScheme(name, data);
-      $('#color-scheme').val(name).change();
-
-      showEditor();
-    });
-
-    $('#edit-scheme').click(function(event) {
-      event.preventDefault();
-      showEditor();
-    });
-
-    $('#delete-scheme').click(function(event) {
-      event.preventDefault();
-      deleteScheme();
-    });
-
-    $('#scheme-github').click(function(event) {
-      event.preventDefault();
-      addSchemeOnGitHub();
-    });
-
-    $('#save-scheme').click(saveScheme);
   };
 
   /**
@@ -123,73 +76,6 @@ var colorscheme = (function() {
       if (name != this.scheme.name)
         schemes[name].stylesheet.disabled = true;
     }
-  };
-
-  var showEditor = function() {
-    editor.setValue(module.scheme.data);
-
-    //collapseNavAndTabs();
-    $('#scheme-editor').modal('show');
-  };
-
-  var saveScheme = function() {
-    var name = module.scheme.name;
-
-    customSchemes[name] = editor.getValue();
-    module.addScheme(name, customSchemes[name]);
-    module.setScheme(name);
-    tonnetz.draw(true);
-
-    storeCustomSchemes();
-
-    $('#scheme-editor').modal('hide');
-  };
-
-  var deleteScheme = function() {
-    var name = module.scheme.name;
-
-    $(module.scheme.stylesheet.ownerNode).remove();
-    delete schemes[name];
-    delete customSchemes[name];
-    var $option = $('#color-scheme option')
-        .filter(function() { return $(this).attr('value') == name; });
-    $('#color-scheme').val($option.prev().attr('value'));
-    $option.remove();
-    $('#color-scheme').change();
-
-    storeCustomSchemes();
-  };
-
-  var addSchemeOnGitHub = function() {
-    var scheme = $.extend({}, module.scheme.data);
-    scheme['name'] = scheme['name'].trim();
-
-    var commitMessage = 'Add the \'' + scheme['name'] + '\' color scheme';
-
-    if(scheme['name'].toLowerCase() == 'custom' || scheme['name'].length == 0) {
-      scheme['name'] = 'PLEASE GIVE ME A NAME';
-      commitMessage = 'Add a new color scheme';
-    }
-
-    // Create a filename for this color scheme
-    var name = scheme['name']
-      .replace(/[^a-z0-9]/gi, '-')
-      .replace(/-+/g, '-')
-      .replace(/-$/g, '')
-      .replace(/^-/g, '')
-      .toLowerCase();
-
-    // Generate the script contents
-    var contents = 'colorscheme.addScheme("' + name + '", ' +
-        JSON.stringify(scheme, null, 2) +
-        ');';
-
-    // Open the 'New file' page on GitHub
-    window.open('https://github.com/cifkao/tonnetz-viz/new/master/color-schemes/' +
-        '?filename=color-schemes/' + name + '.js' +
-        '&value=' + encodeURIComponent(contents) +
-        '&message=' + encodeURIComponent(commitMessage)
-    );
   };
 
   var addStylesheet = function(scheme) {
