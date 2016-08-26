@@ -374,21 +374,34 @@ var tonnetz = (function() {
     ctx.stroke();
   };
 
-  var getNeighborXYDiff = function(t1, t2){
-    var diff = (t2-t1+12)%12;
+  var getNeighborXYDiff = function(t1, t2) {
+    var diff = (t2 - t1 + 12) % 12;
+    var x, y;
 
-    var result;
-    switch (diff){
-      case 3: result = {x: -0.5*SQRT_3*u, y: -0.5*u}; break;
-      case 7: result = {x: 0, y: -1*u}; break;
-      case 4: result = {x: 0.5*SQRT_3*u, y: -0.5*u}; break;
-      case 9: result = {x: 0.5*SQRT_3*u, y: 0.5*u}; break;
-      case 5: result = {x: 0, y: 1*u}; break;
-      case 8: result = {x: -0.5*SQRT_3*u, y: 0.5*u}; break;
+    if (3 == diff) {
+      x = 0.5;
+      y = -0.5 * SQRT_3;
+    } else if (7 == diff) {
+      x = 1;
+      y = 0;
+    } else if (4 == diff) {
+      x = 0.5;
+      y = 0.5 * SQRT_3;
+    } else if (9 == diff) {
+      x = -0.5;
+      y = 0.5 * SQRT_3;
+    } else if (5 == diff) {
+      x = -1;
+      y = 0;
+    } else if (8 == diff) {
+      x = -0.5;
+      y = -0.5 * SQRT_3;
     }
 
-    result = {x: -result.y, y: result.x};
-    return result;
+    return {
+      x: u * x,
+      y: u * y
+    };
   };
 
   var createLabel = function(text, x, y) {
@@ -444,8 +457,8 @@ var tonnetz = (function() {
     var yUnit = u * SQRT_3;
     var uW = Math.ceil(W/u);
     var uH = Math.ceil(H/yUnit);
-    for(var j=-Math.floor(uW/2+1); j<=Math.floor(uW/2+1); j++){
-      for(var i=-Math.floor(uH/2+1); i<=Math.floor(uH/2+1); i++){
+    for(var j=-Math.floor(uW/2+1); j<=Math.floor(uW/2+1); j++) {
+      for(var i=-Math.floor(uH/2+1); i<=Math.floor(uH/2+1); i++) {
         addNode(((i-7*j)%12 + 12)%12,
                 W/2 - j*u,
                 H/2 + i*yUnit);

@@ -1,6 +1,6 @@
 var canvas, ctx, noteLabels, triadLabels;
 
-$(function(){
+$(function() {
   canvas = document.getElementById("canvas");
   ctx = canvas.getContext("2d");
   noteLabels = document.getElementById("note-labels");
