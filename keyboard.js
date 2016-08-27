@@ -63,10 +63,11 @@ var keyboard = (function() {
 
   var noteOff = function(note) {
     tonnetz.noteOff(16, note);
-    audio.noteOff(16, note);
 
     if (sustain)
       sustainNotes[note] = true;
+    else
+      audio.noteOff(16, note);
   };
 
   var transpose = function(delta) {
