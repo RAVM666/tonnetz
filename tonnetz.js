@@ -242,8 +242,6 @@ var tonnetz = (function() {
   var drawNow = function() {
     drawTimeout = null;
 
-    colors.update();
-
     var now = new Date();
 
     ctx.clearRect(0, 0, W, H);

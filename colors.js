@@ -5,8 +5,6 @@ var colors = (function() {
 
   var STATE_NAMES = ['OFF', 'GHOST', 'SUSTAIN', 'ON'];
 
-  module.scheme = null;
-
   var schemes = {};
 
   module.addScheme = function(name, data) {
@@ -18,8 +16,10 @@ var colors = (function() {
   };
 
   module.init = function() {
-    this.scheme = schemes["default"];
-    var data = this.scheme.data;
+    var scheme = schemes["default"];
+    var data = scheme.data;
+
+    scheme.stylesheet.disabled = false;
 
     this.stroke = [];
     this.fill = [];
@@ -30,15 +30,6 @@ var colors = (function() {
 
     this.minorFill = data['faces']['minor']['fill'];
     this.majorFill = data['faces']['major']['fill'];
-  };
-
-  module.update = function() {
-    this.scheme.stylesheet.disabled = false;
-
-    for (name in schemes) {
-      if (name != this.scheme.name)
-        schemes[name].stylesheet.disabled = true;
-    }
   };
 
   var addStylesheet = function(scheme) {
