@@ -6,7 +6,6 @@ $(function() {
   noteLabels = document.getElementById("note-labels");
   triadLabels = document.getElementById("triad-labels");
 
-  storage.init();
   colors.init();
   audio.init();
   tonnetz.init();
