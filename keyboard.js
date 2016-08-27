@@ -40,7 +40,7 @@ var keyboard = (function() {
 
   var onKeyDown = function(event) {
     var key = event.key;
-    if (" " == key)
+    if ("Shift" == key)
       tonnetz.sustainOn(16);
     else if ("ArrowDown" == key)
       base += 4;
@@ -61,7 +61,7 @@ var keyboard = (function() {
 
   var onKeyUp = function(event) {
     var key = event.key;
-    if (" " == key)
+    if ("Shift" == key)
       tonnetz.panic();
 
     var note = getPitchFromKeyboardEvent(event);
