@@ -28,7 +28,7 @@ var midi = (function() {
   };
 
   var removeMIDIPort = function(port) {
-      port.removeEventListener('midimessage', MIDIMessageEventListener); 
+      port.removeEventListener('midimessage', MIDIMessageEventListener);
       tonnetz.panic();
   };
 
