@@ -472,7 +472,7 @@ var tonnetz = (function() {
 
     for (let i3 = -n3; i3 <= n3; i3++) {
       for (let i4 = -n4; i4 <= n4; i4++) {
-        let t = ((3 * i3 + 4 * i4) % 12 + 12) % 12;
+        let t = ((8 + 3 * i3 + 4 * i4) % 12 + 12) % 12;
         let x = W / 2 + i3 * d3.x + i4 * d4.x;
         let y = H / 2 + i3 * d3.y + i4 * d4.y;
 

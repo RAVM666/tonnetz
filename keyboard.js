@@ -22,7 +22,7 @@ var keyboard = (function() {
     }
   }
 
-  var base = 60;
+  var base = 61;
 
   module.init = function() {
     $(window).keydown(onKeyDown);
