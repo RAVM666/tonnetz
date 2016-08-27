@@ -7,83 +7,9 @@ $(function() {
   triadLabels = document.getElementById("triad-labels");
 
   storage.init();
-  colorscheme.init('default');
+  colorscheme.init();
   audio.init();
   tonnetz.init();
   midi.init();
   keyboard.init();
-
-  $('#navbar a[data-toggle="tab"]').on('shown.bs.tab', function() {
-    if ($(this).attr('href') != "#")
-      $('#tabs').collapse('show');
-      collapseNav();
-  });
-
-  $('#navbar a[data-toggle="tab"]').click(function() {
-    if ($(this).parent().hasClass('active')) {
-      $('#tabs').collapse('hide');
-    }
-  });
-
-  $('.tab-link').click(function(event) {
-    event.preventDefault();
-    var href = $(this).attr('href');
-    $('#navbar a[data-toggle="tab"][href="' + href + '"]').tab('show');
-  });
-
-  $('#tabs').on('hidden.bs.collapse', noTab);
-  $('#tonnetz').click(collapseNavAndTabs);
-  $('.navbar-brand').click(function(event) {
-    event.preventDefault();
-    collapseNavAndTabs();
-  });
-
-  $('#panic').click(function() { tonnetz.panic(); });
-  $('#enable-sustain').click(function() { tonnetz.toggleSustainEnabled(); });
-  $('#show-note-names').click(function() { $(noteLabels).toggle(); });
-  $('#show-triad-names').click(function() { $(triadLabels).toggle(); });
-  $('#ghost-duration').on('input change propertychange paste', function() {
-    if(!tonnetz.setGhostDuration($(this).val())) {
-      $(this).closest('.form-group').addClass('has-error');
-    } else {
-      $(this).closest('.form-group').removeClass('has-error');
-    }
-  });
-
-  $('[data-toggle="tooltip"]').tooltip();
-
-  // Open links with data-popup="true" in a new window.
-  $('body').on('click', 'a[data-popup]', function(event) {
-    window.open($(this)[0].href);
-    event.preventDefault();
-  });
-
-  // Generate mailto: link
-  $('a[href="mailto:"]').attr('href', (function() {
-    var addr = '';
-    var i = 0;
-    do {
-      addr += 'oafcn@kodcamri.'[i%15];
-    } while ((i += 4) < 60);
-    return 'mailto:' + addr;
-  })());
 });
-
-function collapseNav() {
-  if($('.navbar-toggle').is(':visible') && $('.navbar-collapse').hasClass('in')) {
-    $('.navbar-toggle').click();
-  }
-}
-
-function collapseNavAndTabs() {
-  $('#tabs').collapse('hide');
-  collapseNav();
-}
-
-function noTab() {
-  $('#dummy-tab').tab('show');
-}
-
-function somethingHasFocus() {
-  return $(':focus').is('input, select, button, textarea');
-}

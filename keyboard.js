@@ -39,8 +39,6 @@ var keyboard = (function() {
   };
 
   var onKeyDown = function(event) {
-    if (somethingHasFocus()) return;
-
     var key = event.key;
     if (" " == key)
       tonnetz.sustainOn(16);
@@ -62,8 +60,6 @@ var keyboard = (function() {
   };
 
   var onKeyUp = function(event) {
-    if (somethingHasFocus()) return;
-
     var key = event.key;
     if (" " == key)
       tonnetz.panic();

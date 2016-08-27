@@ -8,36 +8,8 @@ var colorscheme = (function() {
   module.scheme = null;
 
   var schemes = {};
-  var customSchemes = {};
-  var customCounter;
 
-  module.init = function(schemeName) {
-    loadCustomSchemes();
-
-    this.setScheme(schemeName);
-  };
-
-  /**
-   * Add or replace a color scheme.
-   */
-  module.addScheme = function(name, data, custom) {
-    var displayName = data['name'];
-
-    if (schemes[name]) {  // Replacing an existing scheme
-      // Remove old stylesheet
-      $(schemes[name].stylesheet.ownerNode).remove();
-
-      // Change option text
-      $('#color-scheme option')
-        .filter(function() { return $(this).attr('value') == name; })
-        .text(displayName);
-    } else {
-      $('#color-scheme')
-        .append($('<option></option>')
-        .attr('value', name)
-        .text(displayName));
-    }
-
+  module.addScheme = function(name, data) {
     schemes[name] = {
       'data': data,
       'name': name,
@@ -45,8 +17,8 @@ var colorscheme = (function() {
     };
   };
 
-  module.setScheme = function(name) {
-    this.scheme = schemes[name];
+  module.init = function() {
+    this.scheme = schemes["default"];
     var data = this.scheme.data;
 
     this.stroke = [];
@@ -58,17 +30,8 @@ var colorscheme = (function() {
 
     this.minorFill = data['faces']['minor']['fill'];
     this.majorFill = data['faces']['major']['fill'];
-
-    var custom = name.startsWith('custom');
-    $('#edit-scheme').parent()
-      .add($('#scheme-github').parent())
-      .toggle(custom);
-    $('#clone-scheme span').toggle(!custom);
   };
 
-  /**
-   * Called by `tonnetz` before drawing.
-   */
   module.update = function() {
     this.scheme.stylesheet.disabled = false;
 
@@ -101,186 +64,6 @@ var colorscheme = (function() {
     sheet.disabled = true;
 
     return sheet;
-  };
-
-  var loadCustomSchemes = function() {
-    customCounter = Number(storage.get('colorscheme.customCounter', '0'));
-    customSchemes = JSON.parse(storage.get('colorscheme.customSchemes', '{}'));
-    for (name in customSchemes) {
-      module.addScheme(name, customSchemes[name]);
-    }
-  };
-
-  var storeCustomSchemes = function() {
-    storage.set('colorscheme.customCounter', customCounter);
-    storage.set('colorscheme.customSchemes', JSON.stringify(customSchemes));
-  };
-
-  var jsonSchema = {
-    "type": "object",
-    "headerTemplate": "{{ self.name }}",
-    "options": {
-      "disable_collapse": true,
-      "disable_edit_json": false
-    },
-    "properties": {
-      "name": {
-        "type": "string",
-        "default": "Custom"
-      },
-      "background": {
-        "type": "string",
-        "format": "color",
-      },
-      "nodes": {
-        "type": "object",
-        "properties": {
-          "OFF": {
-            "type": "object",
-            "properties": {
-              "label": {
-                "type": "string",
-                "format": "color"
-              },
-              "fill": {
-                "type": "string",
-                "format": "color"
-              },
-              "stroke": {
-                "type": "string",
-                "format": "color"
-              }
-            },
-            "required": [
-              "label", "fill", "stroke"
-            ],
-            "additionalProperties": false
-          },
-          "GHOST": {
-            "type": "object",
-            "properties": {
-              "label": {
-                "type": "string",
-                "format": "color"
-              },
-              "fill": {
-                "type": "string",
-                "format": "color"
-              },
-              "stroke": {
-                "type": "string",
-                "format": "color"
-              }
-            },
-            "required": [
-              "label", "fill", "stroke"
-            ],
-            "additionalProperties": false
-          },
-          "SUSTAIN": {
-            "type": "object",
-            "properties": {
-              "label": {
-                "type": "string",
-                "format": "color"
-              },
-              "fill": {
-                "type": "string",
-                "format": "color"
-              },
-              "stroke": {
-                "type": "string",
-                "format": "color"
-              }
-            },
-            "required": [
-              "label", "fill", "stroke"
-            ],
-            "additionalProperties": false
-          },
-          "ON": {
-            "type": "object",
-            "properties": {
-              "label": {
-                "type": "string",
-                "format": "color"
-              },
-              "fill": {
-                "type": "string",
-                "format": "color"
-              },
-              "stroke": {
-                "type": "string",
-                "format": "color"
-              }
-            },
-            "required": [
-              "label", "fill", "stroke"
-            ],
-            "additionalProperties": false
-          }
-        },
-        "required": [
-          "OFF", "GHOST", "SUSTAIN", "ON"
-        ],
-        "additionalProperties": false
-      },
-      "faces": {
-        "type": "object",
-        "properties": {
-          "major": {
-            "type": "object",
-            "properties": {
-              "label-off": {
-                "type": "string",
-                "format": "color"
-              },
-              "label-on": {
-                "type": "string",
-                "format": "color"
-              },
-              "fill": {
-                "type": "string",
-                "format": "color"
-              }
-            },
-            "required": [
-              "label-off", "label-on", "fill"
-            ],
-            "additionalProperties": false
-          },
-          "minor": {
-            "type": "object",
-            "properties": {
-              "label-off": {
-                "type": "string",
-                "format": "color"
-              },
-              "label-on": {
-                "type": "string",
-                "format": "color"
-              },
-              "fill": {
-                "type": "string",
-                "format": "color"
-              }
-            },
-            "required": [
-              "label-off", "label-on", "fill"
-            ],
-            "additionalProperties": false
-          }
-        },
-        "required": [
-          "major", "minor"
-        ],
-        "additionalProperties": false
-      }
-    },
-    "required": [
-      "name", "background", "nodes", "faces"
-    ],
-    "additionalProperties": false
   };
 
   return module;
