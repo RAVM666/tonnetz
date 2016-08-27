@@ -3,7 +3,20 @@ var tonnetz = (function() {
 
   var module = {};
 
-  var TONE_NAMES = ['C', 'C♯', 'D', 'D♯', 'E', 'F', 'F♯', 'G', 'G♯', 'A', 'A♯', 'B'];
+  var TONE_NAMES = [
+    "C",
+    "C\u266F",
+    "D",
+    "D\u266F",
+    "E",
+    "F",
+    "F\u266F",
+    "G",
+    "G\u266F",
+    "A",
+    "A\u266F",
+    "B"
+  ];
   var STATE_OFF = 0,
       STATE_GHOST = 1,
       STATE_SUST = 2,
