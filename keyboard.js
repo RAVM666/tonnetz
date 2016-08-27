@@ -6,10 +6,10 @@ var keyboard = (function() {
   var map = {};
 
   var keys = [
-    ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "="],
-    ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "[", "]"],
-    ["a", "s", "d", "f", "g", "h", "j", "k", "l", ";", "'"],
-    ["z", "x", "c", "v", "b", "n", "m", ",", ".", "/"]
+    [49, 50, 51, 52, 53, 54, 55, 56, 57, 48, 189, 187],
+    [81, 87, 69, 82, 84, 89, 85, 73, 79, 80, 219, 221],
+    [65, 83, 68, 70, 71, 72, 74, 75, 76, 186, 222],
+    [90, 88, 67, 86, 66, 78, 77, 188, 190, 191]
   ];
 
   for (let i = 0; i < keys.length; i++) {
@@ -30,7 +30,7 @@ var keyboard = (function() {
   };
 
   var getPitchFromKeyboardEvent = function(event) {
-    var note = base + map[event.key];
+    var note = base + map[event.which];
 
     if (isFinite(note) && !event.ctrlKey && !event.altKey && !event.metaKey)
       return note;
