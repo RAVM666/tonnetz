@@ -87,21 +87,3 @@ function noTab() {
 function somethingHasFocus() {
   return $(':focus').is('input, select, button, textarea');
 }
-
-function showAlert(text, type) {
-  var a = $('<div class="alert alert-'+type+' alert-dismissible fade" role="alert">' +
-           '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
-           '<span aria-hidden="true">×</span></button></div>');
-  a.append(document.createTextNode(text));
-  $('#messages').append(a);
-  a.addClass('in');
-
-  var numMessages = $('#messages').children().length; 
-  if (numMessages > 3) {
-    $('#messages').children().slice(0, numMessages-3).alert('close');
-  }
-}
-
-function showWarning(text) { showAlert(text, 'warning'); }
-function showError(text) { showAlert(text, 'danger'); }
-function showSuccess(text) { showAlert(text, 'success'); }

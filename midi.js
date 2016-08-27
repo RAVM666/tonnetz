@@ -7,22 +7,14 @@ var midi = (function() {
 
 
   module.init = function() {
-    if (navigator.requestMIDIAccess) {
-      navigator.requestMIDIAccess().then(onMIDIInit, onMIDIReject);
-    } else {
-      showError('MIDI support is not present in your browser. You can still use ' +
-                'your computer\'s keyboard.');
-    }
+    if (navigator.requestMIDIAccess)
+      navigator.requestMIDIAccess().then(onMIDIInit);
   };
 
   var onMIDIInit = function(mAccess) {
     midiAccess = mAccess;
     midiAccess.inputs.forEach(addMIDIPort);
     midiAccess.addEventListener('statechange', MIDIConnectionEventListener);
-  };
-
-  var onMIDIReject = function(err) {
-    showError('Failed to obtain access to MIDI.');
   };
 
   var MIDIConnectionEventListener = function(event) {
