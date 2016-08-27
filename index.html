@@ -5,15 +5,61 @@
 <meta charset="utf-8">
 <title>Tonnetz</title>
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.css" rel="stylesheet">
-<link href="style.css" rel="stylesheet">
 <script src="https://code.jquery.com/jquery.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/latest/js/bootstrap.js"></script>
+
+<style>
+#tonnetz {
+	position: fixed;
+	z-index: -1;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+}
+
+.labels {
+	color: transparent;
+}
+
+.labels > div {
+	position: absolute;
+}
+
+.labels > div > div {
+	margin-left: -50%;
+	line-height: 1em;
+	margin-top: -0.4em;
+}
+</style>
+
 <script src="audio.js"></script>
 <script src="tonnetz.js"></script>
 <script src="midi.js"></script>
 <script src="keyboard.js"></script>
 <script src="colors.js"></script>
-<script src="main.js"></script>
+
+<script>
+var canvas, ctx, noteLabels, triadLabels;
+
+function main()
+{
+	canvas = document.getElementById("canvas");
+	ctx = canvas.getContext("2d");
+	noteLabels = document.getElementById("note-labels");
+	triadLabels = document.getElementById("triad-labels");
+
+	colors.init();
+	audio.init();
+	tonnetz.init();
+	midi.init();
+	keyboard.init();
+}
+
+$(main);
+</script>
 </head>
 
 <body>
