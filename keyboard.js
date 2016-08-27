@@ -38,6 +38,37 @@ var keyboard = (function() {
       return null;
   };
 
+  var sustainNotes = {};
+  var sustain = false;
+
+  var sustainOn = function() {
+    sustain = true;
+    tonnetz.sustainOn(16);
+  };
+
+  var sustainOff = function() {
+    sustain = false;
+    tonnetz.sustainOff(16);
+
+    for (let n in sustainNotes)
+      noteOff(n);
+  };
+
+  var noteOn = function(note) {
+    tonnetz.noteOn(16, note);
+    audio.noteOn(16, note);
+
+    delete sustainNotes[note];
+  };
+
+  var noteOff = function(note) {
+    tonnetz.noteOff(16, note);
+    audio.noteOff(16, note);
+
+    if (sustain)
+      sustainNotes[note] = true;
+  };
+
   var transpose = function(delta) {
     base += delta;
     tonnetz.panic();
@@ -46,7 +77,7 @@ var keyboard = (function() {
   var onKeyDown = function(event) {
     var key = event.which;
     if (16 == key)
-      tonnetz.sustainOn(16);
+      sustainOn();
     else if (32 == key)
       tonnetz.panic();
     else if (40 == key)
@@ -60,8 +91,7 @@ var keyboard = (function() {
 
     var note = getPitchFromKeyboardEvent(event);
     if (note != null) {
-      tonnetz.noteOn(16, note);
-      audio.noteOn(16, note);
+      noteOn(note);
       return false;
     }
   };
@@ -69,12 +99,11 @@ var keyboard = (function() {
   var onKeyUp = function(event) {
     var key = event.which;
     if (16 == key)
-      tonnetz.panic();
+      sustainOff();
 
     var note = getPitchFromKeyboardEvent(event);
     if (note != null) {
-      tonnetz.noteOff(16, note);
-      audio.noteOff(16, note);
+      noteOff(note);
       return false;
     }
   };
