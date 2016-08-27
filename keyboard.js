@@ -39,16 +39,16 @@ var keyboard = (function() {
   };
 
   var onKeyDown = function(event) {
-    var key = event.key;
-    if ("Shift" == key)
+    var key = event.which;
+    if (16 == key)
       tonnetz.sustainOn(16);
-    else if ("ArrowDown" == key)
+    else if (40 == key)
       base += 4;
-    else if ("ArrowUp" == key)
+    else if (38 == key)
       base -= 4;
-    else if ("ArrowRight" == key)
+    else if (39 == key)
       base += 7;
-    else if ("ArrowLeft" == key)
+    else if (37 == key)
       base -= 7;
 
     var note = getPitchFromKeyboardEvent(event);
@@ -60,8 +60,8 @@ var keyboard = (function() {
   };
 
   var onKeyUp = function(event) {
-    var key = event.key;
-    if ("Shift" == key)
+    var key = event.which;
+    if (16 == key)
       tonnetz.panic();
 
     var note = getPitchFromKeyboardEvent(event);
