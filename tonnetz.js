@@ -242,7 +242,7 @@ var tonnetz = (function() {
   var drawNow = function() {
     drawTimeout = null;
 
-    colorscheme.update();
+    colors.update();
 
     var now = new Date();
 
@@ -282,7 +282,7 @@ var tonnetz = (function() {
             ctx.lineTo(c.topPos.x, c.topPos.y);
             ctx.lineTo(c.leftPos.x, c.leftPos.y);
             ctx.closePath();
-            ctx.fillStyle = colorscheme.minorFill;
+            ctx.fillStyle = colors.minorFill;
             ctx.fill();
           }
           if (rightOn) { // right face (major triad)
@@ -292,7 +292,7 @@ var tonnetz = (function() {
             ctx.lineTo(c.topPos.x, c.topPos.y);
             ctx.lineTo(c.rightPos.x, c.rightPos.y);
             ctx.closePath();
-            ctx.fillStyle = colorscheme.majorFill;
+            ctx.fillStyle = colors.majorFill;
             ctx.fill();
           }
         }
@@ -338,8 +338,8 @@ var tonnetz = (function() {
         ctx.arc(x, y, u/5, 0, Math.PI * 2, false);
         ctx.closePath();
 
-        ctx.fillStyle = colorscheme.fill[tones[tone].state];
-        ctx.strokeStyle = colorscheme.stroke[tones[tone].state];
+        ctx.fillStyle = colors.fill[tones[tone].state];
+        ctx.strokeStyle = colors.stroke[tones[tone].state];
         toneGrid[tone][i].label.className = 'state-' + STATE_NAMES[tones[tone].state];
 
         if (tones[tone].state == STATE_OFF) {
@@ -364,7 +364,7 @@ var tonnetz = (function() {
     ctx.beginPath();
     ctx.moveTo(0, 0);
     ctx.lineTo(endpoint.x, endpoint.y);
-    ctx.strokeStyle = colorscheme.stroke[state];
+    ctx.strokeStyle = colors.stroke[state];
     ctx.lineWidth = (state != STATE_OFF) ? 1.5 : 1;
     ctx.stroke();
   };

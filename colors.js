@@ -1,4 +1,4 @@
-var colorscheme = (function() {
+var colors = (function() {
   "use strict";
 
   var module = {};

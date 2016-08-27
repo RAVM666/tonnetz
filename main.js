@@ -7,7 +7,7 @@ $(function() {
   triadLabels = document.getElementById("triad-labels");
 
   storage.init();
-  colorscheme.init();
+  colors.init();
   audio.init();
   tonnetz.init();
   midi.init();

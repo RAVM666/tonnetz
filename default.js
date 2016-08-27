@@ -1,4 +1,4 @@
-colorscheme.addScheme("default", {
+colors.addScheme("default", {
   "name": "Default",
   "background": "#ffffff",
   "nodes": {
