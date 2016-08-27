@@ -38,18 +38,25 @@ var keyboard = (function() {
       return null;
   };
 
+  var transpose = function(delta) {
+    base += delta;
+    tonnetz.panic();
+  };
+
   var onKeyDown = function(event) {
     var key = event.which;
     if (16 == key)
       tonnetz.sustainOn(16);
+    else if (32 == key)
+      tonnetz.panic();
     else if (40 == key)
-      base += 4;
+      transpose(4);
     else if (38 == key)
-      base -= 4;
+      transpose(-4);
     else if (39 == key)
-      base += 7;
+      transpose(7);
     else if (37 == key)
-      base -= 7;
+      transpose(-7);
 
     var note = getPitchFromKeyboardEvent(event);
     if (note != null) {
