@@ -5,60 +5,46 @@ var colors = (function() {
 
   var STATE_NAMES = ['OFF', 'GHOST', 'SUSTAIN', 'ON'];
 
-  var schemes = {};
-
-  module.addScheme = function(name, data) {
-    schemes[name] = {
-      'data': data,
-      'name': name,
-      'stylesheet': addStylesheet(data)
-    };
+  var data = {
+    "background": "#ffffff",
+    "nodes": {
+      "OFF": {
+        "label": "#aaaaaa",
+        "fill": "#ffffff",
+        "stroke": "#bababa"
+      },
+      "GHOST": {
+        "label": "#ffffff",
+        "fill": "#aeaeae",
+        "stroke": "#bababa"
+      },
+      "SUSTAIN": {
+        "label": "#d1dbf0",
+        "fill": "#46629e",
+        "stroke": "#0e1f5b"
+      },
+      "ON": {
+        "label": "#ffffff",
+        "fill": "#2c4885",
+        "stroke": "#0e1f5b"
+      }
+    },
+    "faces": {
+      "major": {
+        "label-off": "#c0c0c0",
+        "label-on": "#bea866",
+        "fill": "#faf7db"
+      },
+      "minor": {
+        "label-off": "#c0c0c0",
+        "label-on": "#aa9b68",
+        "fill": "#eeebc9"
+      }
+    }
   };
 
   module.init = function() {
-    colors.addScheme("default", {
-      "name": "Default",
-      "background": "#ffffff",
-      "nodes": {
-        "OFF": {
-          "label": "#aaaaaa",
-          "fill": "#ffffff",
-          "stroke": "#bababa"
-        },
-        "GHOST": {
-          "label": "#ffffff",
-          "fill": "#aeaeae",
-          "stroke": "#bababa"
-        },
-        "SUSTAIN": {
-          "label": "#d1dbf0",
-          "fill": "#46629e",
-          "stroke": "#0e1f5b"
-        },
-        "ON": {
-          "label": "#ffffff",
-          "fill": "#2c4885",
-          "stroke": "#0e1f5b"
-        }
-      },
-      "faces": {
-        "major": {
-          "label-off": "#c0c0c0",
-          "label-on": "#bea866",
-          "fill": "#faf7db"
-        },
-        "minor": {
-          "label-off": "#c0c0c0",
-          "label-on": "#aa9b68",
-          "fill": "#eeebc9"
-        }
-      }
-    });
-
-    var scheme = schemes["default"];
-    var data = scheme.data;
-
-    scheme.stylesheet.disabled = false;
+    addStylesheet(data);
 
     this.stroke = [];
     this.fill = [];
@@ -90,10 +76,6 @@ var colors = (function() {
       sheet.insertRule('#triad-labels .' + type + '.state-ON { color: ' +
         scheme['faces'][type]['label-on'] + '}', 0);
     });
-
-    sheet.disabled = true;
-
-    return sheet;
   };
 
   return module;
