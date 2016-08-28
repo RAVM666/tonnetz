@@ -365,9 +365,9 @@ var tonnetz = (function() {
         toneGrid[tone][i].label.className = 'state-' + STATE_NAMES[tones[tone].state];
 
         if (tones[tone].state == STATE_OFF) {
-          ctx.lineWidth = 1;
+          ctx.lineWidth = 1.5;
         } else {
-          ctx.lineWidth = 2;
+          ctx.lineWidth = 2.25;
         }
 
         ctx.fill();
@@ -387,7 +387,7 @@ var tonnetz = (function() {
     ctx.moveTo(0, 0);
     ctx.lineTo(endpoint.x, endpoint.y);
     ctx.strokeStyle = colors.stroke[state];
-    ctx.lineWidth = (state != STATE_OFF) ? 1.5 : 1;
+    ctx.lineWidth = (state != STATE_OFF) ? 2.25 : 1.5;
     ctx.stroke();
   };
 
