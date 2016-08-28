@@ -8,30 +8,30 @@ var colors = (function() {
   var data = {
     "nodes": {
       "OFF": {
-        "fill": "#ffffff",
-        "stroke": "#bababa"
+        "fill": "#eeeeee",
+        "stroke": "#555555"
       },
       "GHOST": {
-        "fill": "#aeaeae",
-        "stroke": "#bababa"
+        "fill": "#777777",
+        "stroke": "#333333"
       },
       "SUSTAIN": {
-        "fill": "#46629e",
-        "stroke": "#0e1f5b"
+        "fill": "#555555",
+        "stroke": "#333333"
       },
       "ON": {
-        "fill": "#2c4885",
-        "stroke": "#0e1f5b"
+        "fill": "#333333",
+        "stroke": "#000000"
       }
     },
     "faces": {
       "major": {
-        "fill-off": "#ffffff", // "#f2dede",
-        "fill-on": "#faf7db" // "#d9534f"
+        "fill-off": "#f2dede",
+        "fill-on": "#d9534f"
       },
       "minor": {
-        "fill-off": "#ffffff", // "#d9edf7",
-        "fill-on": "#eeebc9" // "#337ab7"
+        "fill-off": "#d9edf7",
+        "fill-on": "#337ab7"
       }
     }
   };
