@@ -5,16 +5,16 @@ var tonnetz = (function() {
 
   var TONE_NAMES = [
     "C",
-    "C\u266F",
+    "C#",
     "D",
-    "D\u266F",
+    "D#",
     "E",
     "F",
-    "F\u266F",
+    "F#",
     "G",
-    "G\u266F",
+    "G#",
     "A",
-    "A\u266F",
+    "A#",
     "B"
   ];
   var STATE_OFF = 0,
