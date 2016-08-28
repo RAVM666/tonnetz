@@ -433,7 +433,7 @@ var tonnetz = (function() {
   };
 
   var addNode = function(tone, x, y) {
-    if (x < -u || y < -u || x > W + u || y > H + u)
+    if (x < -2*u || y < -2*u || x > W + 2*u || y > H + 2*u)
       return;
 
     const d3 = getNeighborXYDiff(0, 3);
