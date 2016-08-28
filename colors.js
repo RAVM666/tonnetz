@@ -26,10 +26,12 @@ var colors = (function() {
     },
     "faces": {
       "major": {
-        "fill": "#faf7db"
+        "fill-off": "#ffffff", // "#f2dede",
+        "fill-on": "#faf7db" // "#d9534f"
       },
       "minor": {
-        "fill": "#eeebc9"
+        "fill-off": "#ffffff", // "#d9edf7",
+        "fill-on": "#eeebc9" // "#337ab7"
       }
     }
   };
@@ -42,8 +44,10 @@ var colors = (function() {
       this.fill.push(data['nodes'][STATE_NAMES[i]]['fill']);
     }
 
-    this.minorFill = data['faces']['minor']['fill'];
-    this.majorFill = data['faces']['major']['fill'];
+    this.minorFillOn = data['faces']['minor']['fill-on'];
+    this.majorFillOn = data['faces']['major']['fill-on'];
+    this.minorFillOff = data['faces']['minor']['fill-off'];
+    this.majorFillOff = data['faces']['major']['fill-off'];
   };
 
   return module;

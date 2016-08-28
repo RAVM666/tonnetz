@@ -284,43 +284,54 @@ var tonnetz = (function() {
       for (var i=0; i<toneGrid[tone].length; i++) {
         setTranslate(ctx, toneGrid[tone][i].x, toneGrid[tone][i].y);
 
-        var minorOn = false, majorOn = false;
-        if (thisOn && topOn) {
-          if (leftOn) { // left face (minor triad)
-            minorOn = true;
-            ctx.beginPath();
-            ctx.moveTo(0, 0);
-            ctx.lineTo(c.topPos.x, c.topPos.y);
-            ctx.lineTo(c.leftPos.x, c.leftPos.y);
-            ctx.closePath();
-            ctx.fillStyle = colors.minorFill;
-            ctx.fill();
-          }
-          if (rightOn) { // right face (major triad)
-            majorOn = true;
-            ctx.beginPath();
-            ctx.moveTo(0, 0);
-            ctx.lineTo(c.topPos.x, c.topPos.y);
-            ctx.lineTo(c.rightPos.x, c.rightPos.y);
-            ctx.closePath();
-            ctx.fillStyle = colors.majorFill;
-            ctx.fill();
-          }
-        }
+        var minorOn = (thisOn && topOn && leftOn);
+        var majorOn = (thisOn && topOn && rightOn);
 
         var $minorTriadLabel = $(toneGrid[tone][i].minorTriadLabel);
         var $majorTriadLabel = $(toneGrid[tone][i].majorTriadLabel);
 
         if (minorOn) {
           $minorTriadLabel.addClass('state-ON');
+
+          ctx.beginPath();
+          ctx.moveTo(0, 0);
+          ctx.lineTo(c.topPos.x, c.topPos.y);
+          ctx.lineTo(c.leftPos.x, c.leftPos.y);
+          ctx.closePath();
+          ctx.fillStyle = colors.minorFillOn;
+          ctx.fill();
         } else {
           $minorTriadLabel.removeClass('state-ON');
+
+          ctx.beginPath();
+          ctx.moveTo(0, 0);
+          ctx.lineTo(c.topPos.x, c.topPos.y);
+          ctx.lineTo(c.leftPos.x, c.leftPos.y);
+          ctx.closePath();
+          ctx.fillStyle = colors.minorFillOff;
+          ctx.fill();
         }
 
         if (majorOn) {
           $majorTriadLabel.addClass('state-ON');
+
+          ctx.beginPath();
+          ctx.moveTo(0, 0);
+          ctx.lineTo(c.topPos.x, c.topPos.y);
+          ctx.lineTo(c.rightPos.x, c.rightPos.y);
+          ctx.closePath();
+          ctx.fillStyle = colors.majorFillOn;
+          ctx.fill();
         } else {
           $majorTriadLabel.removeClass('state-ON');
+
+          ctx.beginPath();
+          ctx.moveTo(0, 0);
+          ctx.lineTo(c.topPos.x, c.topPos.y);
+          ctx.lineTo(c.rightPos.x, c.rightPos.y);
+          ctx.closePath();
+          ctx.fillStyle = colors.majorFillOff;
+          ctx.fill();
         }
       }
     }
