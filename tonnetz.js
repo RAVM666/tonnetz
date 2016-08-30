@@ -27,15 +27,13 @@ var tonnetz = (function() {
       H,  // height
       u;  // unit distance (distance between neighbors)
 
-  module.density = 22;
-  module.ghostDuration = 500;
+  var ghostDuration = 500;
 
   var toneGrid = [];
   var tones;
   var channels;
 
-  var sustainEnabled = true,
-      sustain = false;
+  var sustain = false;
 
   var CHANNELS = 17;  // the 17th channel is for the computer keyboard
 
@@ -99,7 +97,7 @@ var tonnetz = (function() {
 
         // Check if this was the last channel with this tone
         if ($.isEmptyObject(tones[i].byChannel)) {
-          if (sustainEnabled && channels[c].sustain) {
+          if (channels[c].sustain) {
             tones[i].state = STATE_SUST;
             channels[c].sustTones[i] = 1;
           } else {
@@ -161,36 +159,9 @@ var tonnetz = (function() {
   };
 
 
-  module.toggleSustainEnabled = function() {
-    sustainEnabled = !sustainEnabled;
-  };
-
-  module.setDensity = function(density) {
-    if (isFinite(density) && density >= 5 && density <= 50) {
-      this.density = density;
-      this.rebuild();
-    }
-  };
-
-  module.setGhostDuration = function(duration) {
-    if (isFinite(duration) && duration !== null && duration !== '') {
-      duration = Number(duration);
-      if (duration >= 0) {
-        if (duration != this.ghostDuration) {
-          this.ghostDuration = duration;
-          this.draw();
-        }
-        return true;
-      }
-    }
-
-    return false;
-  };
-
-
   var releaseTone = function(tone) {
     tone.release = new Date();
-    if (module.ghostDuration > 0) {
+    if (ghostDuration > 0) {
       tone.state = STATE_GHOST;
       ghosts();
     } else {
@@ -214,7 +185,7 @@ var tonnetz = (function() {
 
         for (var i=0; i<12; i++) {
           if (tones[i].state == STATE_GHOST) {
-            if (now - tones[i].release >= module.ghostDuration) {
+            if (now - tones[i].release >= ghostDuration) {
               tones[i].state = STATE_OFF;
               numDead++;
             } else {
@@ -230,7 +201,7 @@ var tonnetz = (function() {
 
         if (numDead>0)
           module.draw();
-      }, Math.min(module.ghostDuration, 30));
+      }, Math.min(ghostDuration, 30));
     }
   };
 
