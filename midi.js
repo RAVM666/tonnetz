@@ -14,26 +14,26 @@ var midi = (function() {
   var onMIDIInit = function(mAccess) {
     midiAccess = mAccess;
     midiAccess.inputs.forEach(addMIDIPort);
-    midiAccess.addEventListener('statechange', MIDIConnectionEventListener);
+    midiAccess.addEventListener("statechange", MIDIConnectionEventListener);
   };
 
   var MIDIConnectionEventListener = function(event) {
     var port = event.port;
-    if (port.type != 'input') return;
+    if (port.type != "input") return;
 
-    if (port.state == 'disconnected')
+    if (port.state == "disconnected")
       removeMIDIPort(port);
-    else if (port.state == 'connected')
+    else if (port.state == "connected")
       addMIDIPort(port);
   };
 
   var removeMIDIPort = function(port) {
-      port.removeEventListener('midimessage', MIDIMessageEventListener);
+      port.removeEventListener("midimessage", MIDIMessageEventListener);
       tonnetz.panic();
   };
 
   var addMIDIPort = function(port) {
-      port.addEventListener('midimessage', MIDIMessageEventListener);
+      port.addEventListener("midimessage", MIDIMessageEventListener);
       tonnetz.panic();
   };
 

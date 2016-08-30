@@ -21,7 +21,7 @@ var tonnetz = (function() {
       STATE_GHOST = 1,
       STATE_SUST = 2,
       STATE_ON = 3;
-  var STATE_NAMES = ['OFF', 'GHOST', 'SUSTAIN', 'ON'];
+  var STATE_NAMES = ["OFF", "GHOST", "SUSTAIN", "ON"];
 
   var W,  // width
       H,  // height
@@ -41,22 +41,22 @@ var tonnetz = (function() {
   module.init = function() {
     tones = $.map(Array(12), function(_, i) {
       return {
-        'pitch': i,
-        'name': TONE_NAMES[i],
-        'state': STATE_OFF,
-        'byChannel': {},     // counts of this tone in each channel
-        'channelsSust': {},  // channels where the tone is sustained
-        'released': null,    // the last time the note was on
-        'cache': {}          // temporary data
+        pitch: i,
+        name: TONE_NAMES[i],
+        state: STATE_OFF,
+        byChannel: {},     // counts of this tone in each channel
+        channelsSust: {},  // channels where the tone is sustained
+        released: null,    // the last time the note was on
+        cache: {}          // temporary data
       };
     });
 
     channels = $.map(Array(CHANNELS), function(_, i) {
       return {
-        'number': i,
-        'pitches': {},
-        'sustTones': {},
-        'sustain': false
+        number: i,
+        pitches: {},
+        sustTones: {},
+        sustain: false
       };
     });
     module.channels = channels;
@@ -262,7 +262,7 @@ var tonnetz = (function() {
         var $majorTriadLabel = $(toneGrid[tone][i].majorTriadLabel);
 
         if (minorOn) {
-          $minorTriadLabel.addClass('state-ON');
+          $minorTriadLabel.addClass("state-ON");
 
           ctx.beginPath();
           ctx.moveTo(0, 0);
@@ -272,7 +272,7 @@ var tonnetz = (function() {
           ctx.fillStyle = colors.minorFillOn;
           ctx.fill();
         } else {
-          $minorTriadLabel.removeClass('state-ON');
+          $minorTriadLabel.removeClass("state-ON");
 
           ctx.beginPath();
           ctx.moveTo(0, 0);
@@ -284,7 +284,7 @@ var tonnetz = (function() {
         }
 
         if (majorOn) {
-          $majorTriadLabel.addClass('state-ON');
+          $majorTriadLabel.addClass("state-ON");
 
           ctx.beginPath();
           ctx.moveTo(0, 0);
@@ -294,7 +294,7 @@ var tonnetz = (function() {
           ctx.fillStyle = colors.majorFillOn;
           ctx.fill();
         } else {
-          $majorTriadLabel.removeClass('state-ON');
+          $majorTriadLabel.removeClass("state-ON");
 
           ctx.beginPath();
           ctx.moveTo(0, 0);
@@ -333,7 +333,7 @@ var tonnetz = (function() {
 
         ctx.fillStyle = colors.fill[tones[tone].state];
         ctx.strokeStyle = colors.stroke[tones[tone].state];
-        toneGrid[tone][i].label.className = 'state-' + STATE_NAMES[tones[tone].state];
+        toneGrid[tone][i].label.className = "state-" + STATE_NAMES[tones[tone].state];
 
         if (tones[tone].state == STATE_OFF) {
           ctx.lineWidth = 1.5;
@@ -394,12 +394,12 @@ var tonnetz = (function() {
   };
 
   var createLabel = function(text, x, y) {
-    var label = document.createElement('div');
-    var inner = document.createElement('div');
+    var label = document.createElement("div");
+    var inner = document.createElement("div");
     inner.appendChild(document.createTextNode(text));
     label.appendChild(inner);
-    label.style.left = x + 'px';
-    label.style.top = y + 'px';
+    label.style.left = x + "px";
+    label.style.top = y + "px";
     return label;
   };
 
@@ -431,8 +431,8 @@ var tonnetz = (function() {
 
     node.majorTriadLabel = createLabel(nameUp, major.x, major.y);
     node.minorTriadLabel = createLabel(nameLow, minor.x, minor.y);
-    node.majorTriadLabel.className = 'major';
-    node.minorTriadLabel.className = 'minor';
+    node.majorTriadLabel.className = "major";
+    node.minorTriadLabel.className = "minor";
     triadLabels.appendChild(node.majorTriadLabel);
     triadLabels.appendChild(node.minorTriadLabel);
 
