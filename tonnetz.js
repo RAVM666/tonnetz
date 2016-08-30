@@ -357,7 +357,7 @@ var tonnetz = (function() {
       for (var i=0; i<toneGrid[tone].length; i++) {
         var x = toneGrid[tone][i].x, y = toneGrid[tone][i].y;
         ctx.beginPath();
-        ctx.arc(x, y, u/5, 0, Math.PI * 2, false);
+        ctx.arc(x, y, u * .28, 0, Math.PI * 2, false);
         ctx.closePath();
 
         ctx.fillStyle = colors.fill[tones[tone].state];
@@ -417,8 +417,8 @@ var tonnetz = (function() {
     }
 
     return {
-      x: u * x / 5,
-      y: u * y / 5
+      x: u * x / h,
+      y: u * y / h
     };
   };
 
@@ -473,7 +473,7 @@ var tonnetz = (function() {
     H = window.innerHeight;
     canvas.width = W;
     canvas.height = H;
-    u = (W + H) / this.density;
+    u = H / 11;
 
     const d3 = getNeighborXYDiff(0, 3);
     const d4 = getNeighborXYDiff(0, 4);
@@ -489,8 +489,8 @@ var tonnetz = (function() {
     $(noteLabels).empty();
     $(triadLabels).empty();
 
-    $(noteLabels).css("font-size", u * 0.17 + "px");
-    $(triadLabels).css("font-size", u * 0.17 + "px");
+    $(noteLabels).css("font-size", u * .24 + "px");
+    $(triadLabels).css("font-size", u * .24 + "px");
 
     for (let i3 = -n3; i3 <= n3; i3++) {
       for (let i4 = -n4; i4 <= n4; i4++) {
