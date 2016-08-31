@@ -1,91 +1,89 @@
 var midi = (function() {
-  "use strict";
+	"use strict";
 
-  var module = {};
+	var module = {};
+	var midiAccess;
+	var port = null;
+	var channel = -1;
 
-  var midiAccess, port = null, channel = -1;
+	module.init = function() {
+		if (navigator.requestMIDIAccess)
+			navigator.requestMIDIAccess().then(onMIDIInit);
+	};
 
+	var onMIDIInit = function(mAccess) {
+		midiAccess = mAccess;
+		midiAccess.inputs.forEach(addMIDIPort);
+		midiAccess.addEventListener("statechange", onStateChange);
+	};
 
-  module.init = function() {
-    if (navigator.requestMIDIAccess)
-      navigator.requestMIDIAccess().then(onMIDIInit);
-  };
+	var onStateChange = function(event) {
+		var port = event.port;
 
-  var onMIDIInit = function(mAccess) {
-    midiAccess = mAccess;
-    midiAccess.inputs.forEach(addMIDIPort);
-    midiAccess.addEventListener("statechange", MIDIConnectionEventListener);
-  };
+		if (port.type != "input") return;
 
-  var MIDIConnectionEventListener = function(event) {
-    var port = event.port;
-    if (port.type != "input") return;
+		if (port.state == "disconnected")
+			removeMIDIPort(port);
+		else if (port.state == "connected")
+			addMIDIPort(port);
+	};
 
-    if (port.state == "disconnected")
-      removeMIDIPort(port);
-    else if (port.state == "connected")
-      addMIDIPort(port);
-  };
+	var removeMIDIPort = function(port) {
+		port.removeEventListener("midimessage", onMIDIMessage);
+		tonnetz.panic();
+	};
 
-  var removeMIDIPort = function(port) {
-      port.removeEventListener("midimessage", MIDIMessageEventListener);
-      tonnetz.panic();
-  };
+	var addMIDIPort = function(port) {
+		port.addEventListener("midimessage", onMIDIMessage);
+		tonnetz.panic();
+	};
 
-  var addMIDIPort = function(port) {
-      port.addEventListener("midimessage", MIDIMessageEventListener);
-      tonnetz.panic();
-  };
+	var MIDI_NOTE_ON = 0x90;
+	var MIDI_NOTE_OFF = 0x80;
+	var MIDI_CONTROL_CHANGE = 0xB0;
+	var MIDI_CC_SUSTAIN = 64;
+	var MIDI_CC_ALL_CONTROLLERS_OFF = 121;
+	var MIDI_CC_ALL_NOTES_OFF = 123;
 
-  var MIDI_NOTE_ON           = 0x90,
-      MIDI_NOTE_OFF          = 0x80,
-      MIDI_CONTROL_CHANGE    = 0xB0,
+	var ALL_CHANNELS = -1;
+	var ALL_EXCEPT_DRUMS = -10;
 
-      MIDI_CC_SUSTAIN             = 64,
-      MIDI_CC_ALL_CONTROLLERS_OFF = 121,
-      MIDI_CC_ALL_NOTES_OFF       = 123;
+	var onMIDIMessage = function(event) {
+		var msg = event.data;
+		var msgType = msg[0] & 0xF0;
+		var msgChannel = msg[0] & 0x0F;
 
-  var ALL_CHANNELS = -1,
-      ALL_EXCEPT_DRUMS = -10;
+		if (channel >= 0 && msgChannel != channel)
+			return;
 
-  var MIDIMessageEventListener = function(event) {
-    var msg = event.data;
-    var msgType = msg[0] & 0xF0;
-    var msgChannel = msg[0] & 0x0F;
+		if (channel == ALL_EXCEPT_DRUMS && msgChannel == 9)
+			return;
 
-    if ((channel >= 0 && msgChannel != channel) ||
-        (channel == ALL_EXCEPT_DRUMS && msgChannel == 9))
-      return;
+		switch (msgType) {
+		case MIDI_NOTE_ON:
+			tonnetz.noteOn(msgChannel, msg[1]);
+			break;
+		case MIDI_NOTE_OFF:
+			tonnetz.noteOff(msgChannel, msg[1]);
+			break;
+		case MIDI_CONTROL_CHANGE:
+			switch (msg[1]) {
+			case MIDI_CC_SUSTAIN:
+				if (msg[2] >= 64)
+					tonnetz.sustainOn(msgChannel);
+				else
+					tonnetz.sustainOff(msgChannel);
+				break;
+			case MIDI_CC_ALL_CONTROLLERS_OFF:
+				tonnetz.sustainOff(msgChannel);
+				break;
+			case MIDI_CC_ALL_NOTES_OFF:
+				tonnetz.allNotesOff(msgChannel);
+				break;
+			}
+			break;
+		}
+	};
 
-    switch (msgType) {
-      case MIDI_NOTE_ON:
-        if (msg[2] != 0) {
-          tonnetz.noteOn(msgChannel, msg[1]);
-          break;
-        }
-        // velocity == 0:  note off
-      case MIDI_NOTE_OFF:
-        tonnetz.noteOff(msgChannel, msg[1]);
-        break;
-      case MIDI_CONTROL_CHANGE:
-        switch (msg[1]) {
-          case MIDI_CC_SUSTAIN:
-            if (msg[2] >= 64) {
-              tonnetz.sustainOn(msgChannel);
-            } else {
-              tonnetz.sustainOff(msgChannel);
-            }
-            break;
-          case MIDI_CC_ALL_CONTROLLERS_OFF:
-            tonnetz.sustainOff(msgChannel);
-            break;
-          case MIDI_CC_ALL_NOTES_OFF:
-            tonnetz.allNotesOff(msgChannel);
-            break;
-        }
-        break;
-    }
-  };
-
-  return module;
+	return module;
 })();

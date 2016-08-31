@@ -1,97 +1,98 @@
 var audio = (function() {
-  "use strict";
+	"use strict";
 
-  var Note = function(ctx, type, frequency, attack, release, output) {
-    this.oscillator = ctx.createOscillator();
-    this.oscillator.type = type;
-    this.oscillator.frequency.value = frequency;
-    this.gain = ctx.createGain();
-    this.gain.gain.value = 0;
+	var Note = function(ctx, frequency, output) {
+		var attack = 0.05;
+		var release = 0.1;
+		var type = "sine";
 
-    this.oscillator.connect(this.gain);
-    this.gain.connect(output);
+		this.oscillator = ctx.createOscillator();
+		this.oscillator.type = type;
+		this.oscillator.frequency.value = frequency;
+		this.gain = ctx.createGain();
+		this.gain.gain.value = 0;
 
-    this.ctx = ctx;
-    this.attack = attack;
-    this.release = release;
-  };
+		this.oscillator.connect(this.gain);
+		this.gain.connect(output);
 
-  Note.prototype.start = function() {
-    this.oscillator.start();
-    this.gain.gain.setValueAtTime(0, this.ctx.currentTime);
-    this.gain.gain.linearRampToValueAtTime(1, this.ctx.currentTime + this.attack);
-  };
+		this.ctx = ctx;
+		this.attack = attack;
+		this.release = release;
+	};
 
-  Note.prototype.stop = function() {
-    this.gain.gain.setValueAtTime(this.gain.gain.value, this.ctx.currentTime);
-    this.gain.gain.linearRampToValueAtTime(0, this.ctx.currentTime + this.release);
-    var self = this;
-    setTimeout(function() {
-      self.gain.disconnect();
-      self.oscillator.stop();
-      self.oscillator.disconnect();
-    }, Math.floor(this.release * 1000));
-  };
+	Note.prototype.start = function() {
+		var end = this.ctx.currentTime + this.attack;
+		var gain = this.gain.gain;
 
+		this.oscillator.start();
+		gain.setValueAtTime(0, this.ctx.currentTime);
+		gain.linearRampToValueAtTime(1, end);
+	};
 
-  var module = {};
+	Note.prototype.stop = function() {
+		var self = this;
+		var gain = self.gain.gain;
+		var end = self.ctx.currentTime + self.release;
 
-  var audioCtx, notes, gain;
-  var synthType;
+		gain.setValueAtTime(gain.value, self.ctx.currentTime);
+		gain.linearRampToValueAtTime(0, end);
 
-  var CHANNELS = 17;
-  var ATTACK = 0.05;
-  var RELEASE = 0.1;
+		setTimeout(function() {
+			self.gain.disconnect();
+			self.oscillator.stop();
+			self.oscillator.disconnect();
+		}, Math.floor(self.release * 1000));
+	};
 
+	var module = {};
 
-  module.init = function() {
-    var AudioContext = window.AudioContext || window.webkitAudioContext;
-    if (AudioContext) {
-      audioCtx = new AudioContext();
-      gain = audioCtx.createGain();
-      gain.connect(audioCtx.destination);
-    } else {
-      // display an alert
-    }
+	var audioCtx, notes, gain;
 
-    notes = $.map(Array(CHANNELS), function() { return {}; });
+	var CHANNELS = 17;
 
-    synthType = "sine";
+	module.init = function() {
+		var AudioContext = window.AudioContext;
 
-    gain.gain.value = 0.3;
-  };
+		if (AudioContext) {
+			audioCtx = new AudioContext();
+			gain = audioCtx.createGain();
+			gain.connect(audioCtx.destination);
+		}
 
-  module.noteOn = function(channel, pitch) {
-    if (!audioCtx) return;
+		notes = $.map(Array(CHANNELS), function() {
+			return {};
+		});
 
-    if (!(pitch in notes[channel])) {
-      notes[channel][pitch] =
-        new Note(audioCtx, synthType, pitchToFrequency(pitch),
-                 ATTACK, RELEASE, gain);
-      notes[channel][pitch].start();
-    }
-  };
+		gain.gain.value = 0.3;
+	};
 
-  module.noteOff = function(channel, pitch) {
-    if (!audioCtx) return;
+	module.noteOn = function(channel, pitch) {
+		if (!audioCtx)
+			return;
 
-    if (pitch in notes[channel]) {
-      notes[channel][pitch].stop();
-      delete notes[channel][pitch];
-    }
-  };
+		if (!(pitch in notes[channel])) {
+			let freq = Math.pow(2, (pitch - 69) / 12) * 440;
 
-  module.allNotesOff = function(channel) {
-    for (var i=0; i<CHANNELS; i++) {
-      for (var pitch in notes[channel]) {
-        module.noteOff(channel, pitch);
-      }
-    }
-  };
+			notes[channel][pitch] = new Note(audioCtx, freq, gain);
+			notes[channel][pitch].start();
+		}
+	};
 
-  var pitchToFrequency = function(pitch) {
-    return Math.pow(2, (pitch - 69)/12) * 440;
-  };
+	module.noteOff = function(channel, pitch) {
+		if (!audioCtx)
+			return;
 
-  return module;
+		if (pitch in notes[channel]) {
+			notes[channel][pitch].stop();
+			delete notes[channel][pitch];
+		}
+	};
+
+	module.allNotesOff = function(channel) {
+		for (let i = 0; i < CHANNELS; i++)
+			for (let pitch in notes[channel])
+				module.noteOff(channel, pitch);
+	};
+
+	return module;
 })();
