@@ -22,6 +22,14 @@ var tonnetz = (function() {
       STATE_SUST = 2,
       STATE_ON = 3;
   var STATE_NAMES = ["OFF", "GHOST", "SUSTAIN", "ON"];
+  var colors = {
+    fill: ["#eeeeee", "#777777", "#555555", "#333333"],
+    stroke: ["#555555", "#333333", "#333333", "#000000"],
+    majorFillOff: "#f2dede",
+    majorFillOn: "#d9534f",
+    minorFillOff: "#d9edf7",
+    minorFillOn: "#337ab7"
+  };
 
   var W,  // width
       H,  // height
