@@ -24,7 +24,7 @@ var tonnetz = (function() {
 
 	var W, H, u;
 
-	var ghostDuration = 500;
+	var ghostDuration = 1500;
 
 	var toneGrid = [];
 	var tones;
