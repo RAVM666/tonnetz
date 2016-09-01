@@ -409,6 +409,10 @@ var tonnetz = (function() {
 		updateInt(7, 5, 7 * k, 0);
 	};
 
+	var radius = function(x, y) {
+		return Math.sqrt(x * x + y * y);
+	};
+
 	module.rebuild = function() {
 		W = window.innerWidth;
 		H = window.innerHeight;
@@ -420,9 +424,9 @@ var tonnetz = (function() {
 
 		var d3 = geo[3];
 		var d4 = geo[4];
-		var r3 = Math.sqrt(d3.x * d3.x + d3.y * d3.y);
-		var r4 = Math.sqrt(d4.x * d4.x + d4.y * d4.y);
-		var r = Math.sqrt(W * W / 4 + H * H / 4);
+		var r3 = radius(d3.x, d3.y);
+		var r4 = radius(d4.x, d4.y);
+		var r = radius(W / 2, H / 2);
 		var n3 = Math.ceil(r / r3) + 1;
 		var n4 = Math.ceil(r / r4) + 1;
 
