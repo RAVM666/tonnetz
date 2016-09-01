@@ -223,28 +223,29 @@ var tonnetz = (function() {
 			let grid = toneGrid[tone];
 			let c = tones[tone].cache;
 
-			let leftNeighbor = (tone + 3) % 12;
-			let rightNeighbor = (tone + 4) % 12;
-			let topNeighbor = (tone + 7) % 12;
+			let t3 = (tone + 3) % 12;
+			let t4 = (tone + 4) % 12;
+			let t7 = (tone + 7) % 12;
 
-			c.leftPos = getNeighborXYDiff(tone, leftNeighbor);
-			c.rightPos = getNeighborXYDiff(tone, rightNeighbor);
-			c.topPos = getNeighborXYDiff(tone, topNeighbor);
+			c.d3 = getNeighborXYDiff(tone, t3);
+			c.d4 = getNeighborXYDiff(tone, t4);
+			c.d7 = getNeighborXYDiff(tone, t7);
 
-			c.leftState = tones[leftNeighbor].state;
-			c.rightState = tones[rightNeighbor].state;
-			c.topState = tones[topNeighbor].state;
+			c.s0 = tones[tone].state;
+			c.s3 = tones[t3].state;
+			c.s4 = tones[t4].state;
+			c.s7 = tones[t7].state;
 
-			let thisOn = (tones[tone].state != STATE_OFF);
-			let leftOn = (c.leftState != STATE_OFF);
-			let rightOn = (c.rightState != STATE_OFF);
-			let topOn = (c.topState != STATE_OFF);
+			let o0 = (c.s0 != STATE_OFF);
+			let o3 = (c.s3 != STATE_OFF);
+			let o4 = (c.s4 != STATE_OFF);
+			let o7 = (c.s7 != STATE_OFF);
 
 			for (let i = 0; i < grid.length; i++) {
 				setTranslate(ctx, grid[i].x, grid[i].y);
 
-				let minorOn = (thisOn && topOn && leftOn);
-				let majorOn = (thisOn && topOn && rightOn);
+				let minorOn = (o0 && o7 && o3);
+				let majorOn = (o0 && o7 && o4);
 
 				let $minorLabel = $(grid[i].minorLabel);
 				let $majorLabel = $(grid[i].majorLabel);
@@ -254,8 +255,8 @@ var tonnetz = (function() {
 
 					ctx.beginPath();
 					ctx.moveTo(0, 0);
-					ctx.lineTo(c.topPos.x, c.topPos.y);
-					ctx.lineTo(c.leftPos.x, c.leftPos.y);
+					ctx.lineTo(c.d7.x, c.d7.y);
+					ctx.lineTo(c.d3.x, c.d3.y);
 					ctx.closePath();
 					ctx.fillStyle = colors.minorFillOn;
 					ctx.fill();
@@ -264,8 +265,8 @@ var tonnetz = (function() {
 
 					ctx.beginPath();
 					ctx.moveTo(0, 0);
-					ctx.lineTo(c.topPos.x, c.topPos.y);
-					ctx.lineTo(c.leftPos.x, c.leftPos.y);
+					ctx.lineTo(c.d7.x, c.d7.y);
+					ctx.lineTo(c.d3.x, c.d3.y);
 					ctx.closePath();
 					ctx.fillStyle = colors.minorFillOff;
 					ctx.fill();
@@ -276,8 +277,8 @@ var tonnetz = (function() {
 
 					ctx.beginPath();
 					ctx.moveTo(0, 0);
-					ctx.lineTo(c.topPos.x, c.topPos.y);
-					ctx.lineTo(c.rightPos.x, c.rightPos.y);
+					ctx.lineTo(c.d7.x, c.d7.y);
+					ctx.lineTo(c.d4.x, c.d4.y);
 					ctx.closePath();
 					ctx.fillStyle = colors.majorFillOn;
 					ctx.fill();
@@ -286,8 +287,8 @@ var tonnetz = (function() {
 
 					ctx.beginPath();
 					ctx.moveTo(0, 0);
-					ctx.lineTo(c.topPos.x, c.topPos.y);
-					ctx.lineTo(c.rightPos.x, c.rightPos.y);
+					ctx.lineTo(c.d7.x, c.d7.y);
+					ctx.lineTo(c.d4.x, c.d4.y);
 					ctx.closePath();
 					ctx.fillStyle = colors.majorFillOff;
 					ctx.fill();
@@ -297,15 +298,15 @@ var tonnetz = (function() {
 
 		for (let tone = 0; tone < 12; tone++) {
 			let c = tones[tone].cache;
-			let state = tones[tone].state;
+			let state = c.s0;
 			let grid = toneGrid[tone];
 
 			for (let i = 0; i < grid.length; i++) {
 				setTranslate(ctx, grid[i].x, grid[i].y);
 
-				drawEdge(ctx, c.topPos, state, c.topState);
-				drawEdge(ctx, c.leftPos, state, c.leftState);
-				drawEdge(ctx, c.rightPos, state, c.rightState);
+				drawEdge(ctx, c.d7, state, c.s7);
+				drawEdge(ctx, c.d3, state, c.s3);
+				drawEdge(ctx, c.d4, state, c.s4);
 			}
 		}
 
