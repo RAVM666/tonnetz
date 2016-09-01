@@ -237,9 +237,9 @@ var tonnetz = (function() {
 			let t4 = (tone + 4) % 12;
 			let t7 = (tone + 7) % 12;
 
-			c.d3 = getNeighborXYDiff(tone, t3);
-			c.d4 = getNeighborXYDiff(tone, t4);
-			c.d7 = getNeighborXYDiff(tone, t7);
+			c.d3 = geo[3];
+			c.d4 = geo[4];
+			c.d7 = geo[7];
 
 			c.s0 = tones[tone].state;
 			c.s3 = tones[t3].state;
@@ -337,37 +337,6 @@ var tonnetz = (function() {
 		ctx.stroke();
 	};
 
-	var getNeighborXYDiff = function(t1, t2) {
-		var diff = (t2 - t1 + 12) % 12;
-		var h = 2 * Math.sqrt(3);
-		var x, y;
-
-		if (3 == diff) {
-			x = 3;
-			y = -h;
-		} else if (7 == diff) {
-			x = 7;
-			y = 0;
-		} else if (4 == diff) {
-			x = 4;
-			y = h;
-		} else if (9 == diff) {
-			x = -3;
-			y = h;
-		} else if (5 == diff) {
-			x = -7;
-			y = 0;
-		} else if (8 == diff) {
-			x = -4;
-			y = -h;
-		}
-
-		return {
-			x: u * x / h,
-			y: u * y / h
-		};
-	};
-
 	var createLabel = function(text, x, y) {
 		var label = document.createElement("div");
 		var inner = document.createElement("div");
@@ -386,9 +355,9 @@ var tonnetz = (function() {
 		if (x < -2 * u || y < -u || x > W + 2 * u || y > H + u)
 			return;
 
-		var d3 = getNeighborXYDiff(0, 3);
-		var d4 = getNeighborXYDiff(0, 4);
-		var d7 = getNeighborXYDiff(0, 7);
+		var d3 = geo[3];
+		var d4 = geo[4];
+		var d7 = geo[7];
 		var minor = {
 			x: x + (d3.x + d7.x) / 3,
 			y: y + (d3.y + d7.y) / 3
@@ -418,6 +387,28 @@ var tonnetz = (function() {
 		toneGrid[tone].push(node);
 	};
 
+	var geo = [];
+
+	var updateInt = function(pos, neg, x, y) {
+		geo[pos] = {
+			x: x,
+			y: y
+		};
+		geo[neg] = {
+			x: -x,
+			y: -y
+		};
+	};
+
+	var updateGeo = function() {
+		var h = 2 * Math.sqrt(3);
+		var k = u / h;
+
+		updateInt(3, 9, 3 * k, -h * k);
+		updateInt(4, 8, 4 * k, h * k);
+		updateInt(7, 5, 7 * k, 0);
+	};
+
 	module.rebuild = function() {
 		W = window.innerWidth;
 		H = window.innerHeight;
@@ -425,8 +416,10 @@ var tonnetz = (function() {
 		canvas.height = H;
 		u = H / 11;
 
-		var d3 = getNeighborXYDiff(0, 3);
-		var d4 = getNeighborXYDiff(0, 4);
+		updateGeo();
+
+		var d3 = geo[3];
+		var d4 = geo[4];
 		var r3 = Math.sqrt(d3.x * d3.x + d3.y * d3.y);
 		var r4 = Math.sqrt(d4.x * d4.x + d4.y * d4.y);
 		var r = Math.sqrt(W * W / 4 + H * H / 4);
