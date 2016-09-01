@@ -395,6 +395,11 @@ var tonnetz = (function() {
 	};
 
 	var updateGeo = function() {
+		W = window.innerWidth;
+		H = window.innerHeight;
+		canvas.width = W;
+		canvas.height = H;
+
 		var h = 2 * Math.sqrt(3);
 		var k = H / (11 * h);
 
@@ -412,11 +417,6 @@ var tonnetz = (function() {
 	};
 
 	module.rebuild = function() {
-		W = window.innerWidth;
-		H = window.innerHeight;
-		canvas.width = W;
-		canvas.height = H;
-
 		updateGeo();
 
 		var r3 = radius(d3.x, d3.y);
