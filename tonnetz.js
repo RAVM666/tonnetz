@@ -15,12 +15,12 @@ var tonnetz = (function() {
 	var STATE_NAMES = ["OFF", "GHOST", "SUSTAIN", "ON"];
 	var colors = {
 		fill: ["#eeeeee", "#777777", "#555555", "#333333"],
-		stroke: ["#555555", "#333333", "#333333", "#000000"],
-		majorFillOff: "#f2dede",
-		majorFillOn: "#d9534f",
-		minorFillOff: "#d9edf7",
-		minorFillOn: "#337ab7"
+		stroke: ["#555555", "#333333", "#333333", "#000000"]
 	};
+	var majorFillOff = "#f2dede";
+	var majorFillOn = "#d9534f";
+	var minorFillOff = "#d9edf7";
+	var minorFillOn = "#337ab7";
 
 	var W, H, u;
 
@@ -212,6 +212,16 @@ var tonnetz = (function() {
 			drawTimeout = setTimeout(drawNow, 30);
 	};
 
+	var fillTriad = function(dom, med, color) {
+		ctx.beginPath();
+		ctx.moveTo(0, 0);
+		ctx.lineTo(dom.x, dom.y);
+		ctx.lineTo(med.x, med.y);
+		ctx.closePath();
+		ctx.fillStyle = color;
+		ctx.fill();
+	};
+
 	var drawNow = function() {
 		var now = new Date();
 
@@ -252,46 +262,18 @@ var tonnetz = (function() {
 
 				if (minorOn) {
 					$minorLabel.addClass("state-ON");
-
-					ctx.beginPath();
-					ctx.moveTo(0, 0);
-					ctx.lineTo(c.d7.x, c.d7.y);
-					ctx.lineTo(c.d3.x, c.d3.y);
-					ctx.closePath();
-					ctx.fillStyle = colors.minorFillOn;
-					ctx.fill();
+					fillTriad(c.d7, c.d3, minorFillOn);
 				} else {
 					$minorLabel.removeClass("state-ON");
-
-					ctx.beginPath();
-					ctx.moveTo(0, 0);
-					ctx.lineTo(c.d7.x, c.d7.y);
-					ctx.lineTo(c.d3.x, c.d3.y);
-					ctx.closePath();
-					ctx.fillStyle = colors.minorFillOff;
-					ctx.fill();
+					fillTriad(c.d7, c.d3, minorFillOff);
 				}
 
 				if (majorOn) {
 					$majorLabel.addClass("state-ON");
-
-					ctx.beginPath();
-					ctx.moveTo(0, 0);
-					ctx.lineTo(c.d7.x, c.d7.y);
-					ctx.lineTo(c.d4.x, c.d4.y);
-					ctx.closePath();
-					ctx.fillStyle = colors.majorFillOn;
-					ctx.fill();
+					fillTriad(c.d7, c.d4, majorFillOn);
 				} else {
 					$majorLabel.removeClass("state-ON");
-
-					ctx.beginPath();
-					ctx.moveTo(0, 0);
-					ctx.lineTo(c.d7.x, c.d7.y);
-					ctx.lineTo(c.d4.x, c.d4.y);
-					ctx.closePath();
-					ctx.fillStyle = colors.majorFillOff;
-					ctx.fill();
+					fillTriad(c.d7, c.d4, majorFillOff);
 				}
 			}
 		}
