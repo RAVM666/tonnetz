@@ -237,10 +237,6 @@ var tonnetz = (function() {
 			let t4 = (tone + 4) % 12;
 			let t7 = (tone + 7) % 12;
 
-			c.d3 = geo[3];
-			c.d4 = geo[4];
-			c.d7 = geo[7];
-
 			c.s0 = tones[tone].state;
 			c.s3 = tones[t3].state;
 			c.s4 = tones[t4].state;
@@ -262,18 +258,18 @@ var tonnetz = (function() {
 
 				if (minorOn) {
 					$minorLabel.addClass("state-ON");
-					fillTriad(c.d7, c.d3, minorFillOn);
+					fillTriad(d7, d3, minorFillOn);
 				} else {
 					$minorLabel.removeClass("state-ON");
-					fillTriad(c.d7, c.d3, minorFillOff);
+					fillTriad(d7, d3, minorFillOff);
 				}
 
 				if (majorOn) {
 					$majorLabel.addClass("state-ON");
-					fillTriad(c.d7, c.d4, majorFillOn);
+					fillTriad(d7, d4, majorFillOn);
 				} else {
 					$majorLabel.removeClass("state-ON");
-					fillTriad(c.d7, c.d4, majorFillOff);
+					fillTriad(d7, d4, majorFillOff);
 				}
 			}
 		}
@@ -286,9 +282,9 @@ var tonnetz = (function() {
 			for (let i = 0; i < grid.length; i++) {
 				setTranslate(grid[i].x, grid[i].y);
 
-				drawEdge(c.d7, state, c.s7);
-				drawEdge(c.d3, state, c.s3);
-				drawEdge(c.d4, state, c.s4);
+				drawEdge(d7, state, c.s7);
+				drawEdge(d3, state, c.s3);
+				drawEdge(d4, state, c.s4);
 			}
 		}
 
@@ -355,9 +351,6 @@ var tonnetz = (function() {
 		if (x < -2 * u || y < -u || x > W + 2 * u || y > H + u)
 			return;
 
-		var d3 = geo[3];
-		var d4 = geo[4];
-		var d7 = geo[7];
 		var minor = {
 			x: x + (d3.x + d7.x) / 3,
 			y: y + (d3.y + d7.y) / 3
@@ -388,6 +381,7 @@ var tonnetz = (function() {
 	};
 
 	var geo = [];
+	var d3, d4, d7;
 
 	var updateInt = function(pos, neg, x, y) {
 		geo[pos] = {
@@ -407,6 +401,10 @@ var tonnetz = (function() {
 		updateInt(3, 9, 3 * k, -h * k);
 		updateInt(4, 8, 4 * k, h * k);
 		updateInt(7, 5, 7 * k, 0);
+
+		d3 = geo[3];
+		d4 = geo[4];
+		d7 = geo[7];
 	};
 
 	var radius = function(x, y) {
@@ -422,8 +420,6 @@ var tonnetz = (function() {
 
 		updateGeo();
 
-		var d3 = geo[3];
-		var d4 = geo[4];
 		var r3 = radius(d3.x, d3.y);
 		var r4 = radius(d4.x, d4.y);
 		var r = radius(W / 2, H / 2);
