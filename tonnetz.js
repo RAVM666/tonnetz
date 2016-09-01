@@ -242,7 +242,7 @@ var tonnetz = (function() {
 			let o7 = (c.s7 != STATE_OFF);
 
 			for (let i = 0; i < grid.length; i++) {
-				setTranslate(ctx, grid[i].x, grid[i].y);
+				setTranslate(grid[i].x, grid[i].y);
 
 				let minorOn = (o0 && o7 && o3);
 				let majorOn = (o0 && o7 && o4);
@@ -302,15 +302,15 @@ var tonnetz = (function() {
 			let grid = toneGrid[tone];
 
 			for (let i = 0; i < grid.length; i++) {
-				setTranslate(ctx, grid[i].x, grid[i].y);
+				setTranslate(grid[i].x, grid[i].y);
 
-				drawEdge(ctx, c.d7, state, c.s7);
-				drawEdge(ctx, c.d3, state, c.s3);
-				drawEdge(ctx, c.d4, state, c.s4);
+				drawEdge(c.d7, state, c.s7);
+				drawEdge(c.d3, state, c.s3);
+				drawEdge(c.d4, state, c.s4);
 			}
 		}
 
-		setTranslate(ctx, 0, 0);
+		setTranslate(0, 0);
 
 		for (let tone = 0; tone < 12; tone++) {
 			let grid = toneGrid[tone];
@@ -340,11 +340,11 @@ var tonnetz = (function() {
 		}
 	};
 
-	var setTranslate = function(ctx, x, y) {
+	var setTranslate = function(x, y) {
 		ctx.setTransform(1, 0, 0, 1, x, y);
 	};
 
-	var drawEdge = function(ctx, endpoint, state1, state2) {
+	var drawEdge = function(endpoint, state1, state2) {
 		var state = Math.min(state1, state2);
 
 		ctx.beginPath();
