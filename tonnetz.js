@@ -22,7 +22,7 @@ var tonnetz = (function() {
 	var minorFillOff = "#d9edf7";
 	var minorFillOn = "#337ab7";
 
-	var W, H, u;
+	var W, H;
 
 	var ghostDuration = 1500;
 
@@ -300,7 +300,7 @@ var tonnetz = (function() {
 				let y = grid[i].y;
 
 				ctx.beginPath();
-				ctx.arc(x, y, u * 0.28, 0, Math.PI * 2, false);
+				ctx.arc(x, y, d4.y * 0.28, 0, Math.PI * 2);
 				ctx.closePath();
 
 				ctx.fillStyle = colors.fill[t.state];
@@ -348,7 +348,7 @@ var tonnetz = (function() {
 		x += W / 2;
 		y += H / 2;
 
-		if (x < -2 * u || y < -u || x > W + 2 * u || y > H + u)
+		if (x < -d7.x || y < -d4.y || x > W + d7.x || y > H + d4.y)
 			return;
 
 		var minor = {
@@ -396,7 +396,7 @@ var tonnetz = (function() {
 
 	var updateGeo = function() {
 		var h = 2 * Math.sqrt(3);
-		var k = u / h;
+		var k = H / (11 * h);
 
 		updateInt(3, 9, 3 * k, -h * k);
 		updateInt(4, 8, 4 * k, h * k);
@@ -416,7 +416,6 @@ var tonnetz = (function() {
 		H = window.innerHeight;
 		canvas.width = W;
 		canvas.height = H;
-		u = H / 11;
 
 		updateGeo();
 
@@ -432,8 +431,8 @@ var tonnetz = (function() {
 		$(noteLabels).empty();
 		$(triadLabels).empty();
 
-		$(noteLabels).css("font-size", u * 0.24 + "px");
-		$(triadLabels).css("font-size", u * 0.24 + "px");
+		$(noteLabels).css("font-size", d4.y * 0.24 + "px");
+		$(triadLabels).css("font-size", d4.y * 0.24 + "px");
 
 		for (let i3 = -n3; i3 <= n3; i3++) {
 			let x3 = i3 * d3.x;
