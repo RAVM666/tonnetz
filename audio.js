@@ -1,40 +1,35 @@
 var audio = (function() {
 	"use strict";
 
-	var Note = function(ctx, frequency, output) {
-		var attack = 0.05;
-		var release = 0.1;
-		var type = "sine";
-
+	var Note = function(freq) {
 		this.oscillator = ctx.createOscillator();
-		this.oscillator.type = type;
-		this.oscillator.frequency.value = frequency;
+		this.oscillator.type = "sine";
+		this.oscillator.frequency.value = freq;
 		this.gain = ctx.createGain();
 		this.gain.gain.value = 0;
 
 		this.oscillator.connect(this.gain);
-		this.gain.connect(output);
+		this.gain.connect(ctx.destination);
 
-		this.ctx = ctx;
-		this.attack = attack;
-		this.release = release;
+		this.attack = 0.05;
+		this.release = 0.1;
 	};
 
 	Note.prototype.start = function() {
-		var end = this.ctx.currentTime + this.attack;
+		var end = ctx.currentTime + this.attack;
 		var gain = this.gain.gain;
 
 		this.oscillator.start();
-		gain.setValueAtTime(0, this.ctx.currentTime);
-		gain.linearRampToValueAtTime(1, end);
+		gain.setValueAtTime(0, ctx.currentTime);
+		gain.linearRampToValueAtTime(1 / 12, end);
 	};
 
 	Note.prototype.stop = function() {
 		var self = this;
 		var gain = self.gain.gain;
-		var end = self.ctx.currentTime + self.release;
+		var end = ctx.currentTime + self.release;
 
-		gain.setValueAtTime(gain.value, self.ctx.currentTime);
+		gain.setValueAtTime(gain.value, ctx.currentTime);
 		gain.linearRampToValueAtTime(0, end);
 
 		setTimeout(function() {
@@ -46,40 +41,35 @@ var audio = (function() {
 
 	var module = {};
 
-	var audioCtx, notes, gain;
+	var ctx, notes;
 
 	var CHANNELS = 17;
 
 	module.init = function() {
 		var AudioContext = window.AudioContext;
 
-		if (AudioContext) {
-			audioCtx = new AudioContext();
-			gain = audioCtx.createGain();
-			gain.connect(audioCtx.destination);
-		}
+		if (AudioContext)
+			ctx = new AudioContext();
 
 		notes = $.map(Array(CHANNELS), function() {
 			return {};
 		});
-
-		gain.gain.value = 0.3;
 	};
 
 	module.noteOn = function(channel, pitch) {
-		if (!audioCtx)
+		if (!ctx)
 			return;
 
 		if (!(pitch in notes[channel])) {
 			let freq = Math.pow(2, (pitch - 69) / 12) * 440;
 
-			notes[channel][pitch] = new Note(audioCtx, freq, gain);
+			notes[channel][pitch] = new Note(freq);
 			notes[channel][pitch].start();
 		}
 	};
 
 	module.noteOff = function(channel, pitch) {
-		if (!audioCtx)
+		if (!ctx)
 			return;
 
 		if (pitch in notes[channel]) {
