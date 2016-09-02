@@ -61,7 +61,7 @@ var audio = (function() {
 			return;
 
 		if (!(pitch in notes)) {
-			let freq = Math.pow(2, (pitch - 69) / 12) * 440;
+			let freq = Math.pow(2, (pitch - 9) / 12) * 440;
 
 			notes[pitch] = new Note(freq);
 			notes[pitch].start();

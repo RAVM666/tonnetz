@@ -22,7 +22,7 @@ var keyboard = (function() {
 		}
 	}
 
-	var base = 61;
+	var base = 1;
 
 	module.init = function() {
 		$(window).keydown(onKeyDown);
@@ -30,7 +30,7 @@ var keyboard = (function() {
 	};
 
 	var getPitchFromKeyboardEvent = function(key) {
-		var note = base + map[key];
+		var note = (base + map[key]) % 12;
 
 		if (isFinite(note))
 			return note;
@@ -71,7 +71,7 @@ var keyboard = (function() {
 	};
 
 	var transpose = function(delta) {
-		base += delta;
+		base = (base + delta + 12) % 12;
 		tonnetz.panic();
 	};
 
@@ -83,7 +83,7 @@ var keyboard = (function() {
 		if (special)
 			return;
 
-		if (note)
+		if (note != null)
 			noteOn(note);
 		else if (16 == key)
 			sustainOn();
@@ -103,7 +103,7 @@ var keyboard = (function() {
 		var key = event.which;
 		var note = getPitchFromKeyboardEvent(key);
 
-		if (note)
+		if (note != null)
 			noteOff(note);
 		else if (16 == key)
 			sustainOff();
