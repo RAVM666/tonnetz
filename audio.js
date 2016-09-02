@@ -1,15 +1,25 @@
 var audio = (function() {
 	"use strict";
 
+	var shepard = function(freq) {
+		var x = Math.log2(freq / 440);
+
+		return Math.exp(-x * x);
+	};
+
 	var createWave = function(freq) {
-		var re = Float32Array.from([0, 1]);
-		var im = Float32Array.from([0, 0]);
+		var n = 2 ** 5;
+		var re = new Float32Array(n);
+		var im = new Float32Array(n);
+
+		for (let i = 1; i < n; i *= 2)
+			re[i] = shepard(i * freq);
 
 		return ctx.createPeriodicWave(re, im);
 	};
 
 	var Note = function(pitch) {
-		var freq = Math.pow(2, (pitch - 9) / 12) * 440;
+		var freq = Math.pow(2, (pitch - 33) / 12) * 440;
 		var wave = createWave(freq);
 
 		this.active = false;
