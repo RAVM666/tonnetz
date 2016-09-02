@@ -1,10 +1,11 @@
 var audio = (function() {
 	"use strict";
 
-	var Note = function(freq) {
+	var Note = function(pitch) {
 		var re = Float32Array.from([0, 1]);
 		var im = Float32Array.from([0, 0]);
 		var wave = ctx.createPeriodicWave(re, im);
+		var freq = Math.pow(2, (pitch - 9) / 12) * 440;
 
 		this.oscillator = ctx.createOscillator();
 		this.oscillator.frequency.value = freq;
@@ -61,9 +62,7 @@ var audio = (function() {
 			return;
 
 		if (!(pitch in notes)) {
-			let freq = Math.pow(2, (pitch - 9) / 12) * 440;
-
-			notes[pitch] = new Note(freq);
+			notes[pitch] = new Note(pitch);
 			notes[pitch].start();
 		}
 	};
