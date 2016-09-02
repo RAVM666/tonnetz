@@ -2,9 +2,13 @@ var audio = (function() {
 	"use strict";
 
 	var Note = function(freq) {
+		var re = Float32Array.from([0, 1]);
+		var im = Float32Array.from([0, 0]);
+		var wave = ctx.createPeriodicWave(re, im);
+
 		this.oscillator = ctx.createOscillator();
-		this.oscillator.type = "sine";
 		this.oscillator.frequency.value = freq;
+		this.oscillator.setPeriodicWave(wave);
 		this.gain = ctx.createGain();
 		this.gain.gain.value = 0;
 
