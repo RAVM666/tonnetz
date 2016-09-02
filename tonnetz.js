@@ -108,7 +108,7 @@ var tonnetz = (function() {
 	};
 
 	module.allNotesOff = function(c) {
-		audio.allNotesOff(c);
+		audio.allNotesOff();
 
 		for (let i = 0; i < 12; i++) {
 			delete tones[i].byChannel[c];

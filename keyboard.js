@@ -56,7 +56,7 @@ var keyboard = (function() {
 
 	var noteOn = function(note) {
 		tonnetz.noteOn(16, note);
-		audio.noteOn(16, note);
+		audio.noteOn(note);
 
 		delete sustainNotes[note];
 	};
@@ -67,7 +67,7 @@ var keyboard = (function() {
 		if (sustain)
 			sustainNotes[note] = true;
 		else
-			audio.noteOff(16, note);
+			audio.noteOff(note);
 	};
 
 	var transpose = function(delta) {

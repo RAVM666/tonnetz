@@ -45,47 +45,42 @@ var audio = (function() {
 
 	var module = {};
 
-	var ctx, notes;
+	var ctx;
 
-	var CHANNELS = 17;
+	var notes = {};
 
 	module.init = function() {
 		var AudioContext = window.AudioContext;
 
 		if (AudioContext)
 			ctx = new AudioContext();
-
-		notes = $.map(Array(CHANNELS), function() {
-			return {};
-		});
 	};
 
-	module.noteOn = function(channel, pitch) {
+	module.noteOn = function(pitch) {
 		if (!ctx)
 			return;
 
-		if (!(pitch in notes[channel])) {
+		if (!(pitch in notes)) {
 			let freq = Math.pow(2, (pitch - 69) / 12) * 440;
 
-			notes[channel][pitch] = new Note(freq);
-			notes[channel][pitch].start();
+			notes[pitch] = new Note(freq);
+			notes[pitch].start();
 		}
 	};
 
-	module.noteOff = function(channel, pitch) {
+	module.noteOff = function(pitch) {
 		if (!ctx)
 			return;
 
-		if (pitch in notes[channel]) {
-			notes[channel][pitch].stop();
-			delete notes[channel][pitch];
+		if (pitch in notes) {
+			notes[pitch].stop();
+			delete notes[pitch];
 		}
 	};
 
-	module.allNotesOff = function(channel) {
-		for (let i = 0; i < CHANNELS; i++)
-			for (let pitch in notes[channel])
-				module.noteOff(channel, pitch);
+	module.allNotesOff = function() {
+		for (let pitch in notes)
+			module.noteOff(pitch);
 	};
 
 	return module;
