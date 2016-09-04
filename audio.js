@@ -33,8 +33,8 @@ var audio = (function() {
 		this.gain.gain.value = 0;
 		this.oscillator.connect(this.gain);
 		this.gain.connect(ctx.destination);
-		this.attack = 0.05;
-		this.release = 0.1;
+		this.attack = 0.008;
+		this.release = 0.24;
 		this.oscillator.start();
 	};
 
@@ -44,11 +44,11 @@ var audio = (function() {
 		else
 			this.active = true;
 
-		var end = ctx.currentTime + this.attack;
-		var gain = this.gain.gain;
+		var node = this.gain;
+		var now = ctx.currentTime;
+		var time = this.attack;
 
-		gain.setValueAtTime(0, ctx.currentTime);
-		gain.linearRampToValueAtTime(1 / 12, end);
+		node.gain.setTargetAtTime(1 / 12, now, time);
 	};
 
 	Note.prototype.stop = function() {
@@ -57,12 +57,11 @@ var audio = (function() {
 		else
 			this.active = false;
 
-		var self = this;
-		var gain = self.gain.gain;
-		var end = ctx.currentTime + self.release;
+		var node = this.gain;
+		var now = ctx.currentTime;
+		var time = this.release;
 
-		gain.setValueAtTime(gain.value, ctx.currentTime);
-		gain.linearRampToValueAtTime(0, end);
+		node.gain.setTargetAtTime(0, now, time);
 	};
 
 	var module = {};
