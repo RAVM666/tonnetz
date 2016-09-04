@@ -4,7 +4,7 @@ var keyboard = (function() {
 	var module = {};
 
 	var map = {};
-
+	var hold = [];
 	var keys = [
 		[49, 50, 51, 52, 53, 54, 55, 56, 57, 48, 189, 187],
 		[81, 87, 69, 82, 84, 89, 85, 73, 79, 80, 219, 221],
@@ -77,6 +77,10 @@ var keyboard = (function() {
 
 	var onKeyDown = function(event) {
 		var key = event.which;
+
+		if (hold[key])
+			return;
+
 		var note = getPitchFromKeyboardEvent(key);
 		var special = event.ctrlKey || event.altKey || event.metaKey;
 
@@ -97,6 +101,8 @@ var keyboard = (function() {
 			transpose(7);
 		else if (37 == key)
 			transpose(-7);
+
+		hold[key] = true;
 	};
 
 	var onKeyUp = function(event) {
@@ -107,6 +113,8 @@ var keyboard = (function() {
 			noteOff(note);
 		else if (16 == key)
 			sustainOff();
+
+		hold[key] = false;
 	};
 
 	return module;

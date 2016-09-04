@@ -25,43 +25,35 @@ var audio = (function() {
 		var freq = Math.pow(2, (base - 9) / 12) * 440;
 		var wave = createWave(freq);
 
-		this.active = false;
 		this.oscillator = ctx.createOscillator();
 		this.oscillator.frequency.value = freq;
 		this.oscillator.setPeriodicWave(wave);
-		this.gain = ctx.createGain();
-		this.gain.gain.value = 0;
-		this.oscillator.connect(this.gain);
-		this.gain.connect(ctx.destination);
-		this.attack = 0.008;
-		this.release = 0.24;
+		this.output = ctx.createGain();
+		this.gain = this.output.gain;
+		this.gain.value = 0;
+		this.oscillator.connect(this.output);
+		this.output.connect(ctx.destination);
 		this.oscillator.start();
 	};
 
+	var maxVol = 1 / 12;
+	var sustVol = maxVol / 4;
+	var attack = 0.008;
+	var release = 0.24;
+
 	Note.prototype.start = function() {
-		if (this.active)
-			return;
-		else
-			this.active = true;
-
-		var node = this.gain;
 		var now = ctx.currentTime;
-		var time = this.attack;
 
-		node.gain.setTargetAtTime(1 / 12, now, time);
+		this.gain.cancelScheduledValues(now);
+		this.gain.setTargetAtTime(maxVol, now, attack);
+		this.gain.setTargetAtTime(sustVol, now + attack, release);
 	};
 
 	Note.prototype.stop = function() {
-		if (!this.active)
-			return;
-		else
-			this.active = false;
-
-		var node = this.gain;
 		var now = ctx.currentTime;
-		var time = this.release;
 
-		node.gain.setTargetAtTime(0, now, time);
+		this.gain.cancelScheduledValues(now);
+		this.gain.setTargetAtTime(0, now, release);
 	};
 
 	var module = {};
