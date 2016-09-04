@@ -1,14 +1,16 @@
 var audio = (function() {
 	"use strict";
 
+	var noctaves = 4;
+
 	var shepard = function(freq) {
-		var x = Math.log2(freq / 440);
+		var x = Math.log2(freq / 360) / (noctaves / 3);
 
 		return Math.exp(-x * x);
 	};
 
 	var createWave = function(freq) {
-		var n = 2 ** 5;
+		var n = 1 + 1 << (2 * noctaves + 1);
 		var re = new Float32Array(n);
 		var im = new Float32Array(n);
 
@@ -19,7 +21,8 @@ var audio = (function() {
 	};
 
 	var Note = function(pitch) {
-		var freq = Math.pow(2, (pitch - 33) / 12) * 440;
+		var base = pitch - 12 * noctaves;
+		var freq = Math.pow(2, (base - 9) / 12) * 440;
 		var wave = createWave(freq);
 
 		this.active = false;
